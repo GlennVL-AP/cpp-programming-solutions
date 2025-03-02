@@ -1,3 +1,5 @@
 add_subdirectory(cpprog)
-add_subdirectory(datetime)
-
+add_subdirectory(labo_1)
+add_subdirectory(labo_2)
+add_subdirectory(labo_3)
+add_subdirectory(labo_4)
