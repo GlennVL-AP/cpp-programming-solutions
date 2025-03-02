@@ -118,14 +118,21 @@ private:
     Day day_{epoch_day};
 };
 
-export [[nodiscard]] bool operator==(Date const& rhs, Date const& lhs)
+export [[nodiscard]] bool operator==(Date const& lhs, Date const& rhs)
 {
     return (lhs.year().get() == rhs.year().get()) && (lhs.month() == rhs.month()) && (lhs.day().get() == rhs.day().get());
 }
 
-export [[nodiscard]] bool operator!=(Date const& rhs, Date const& lhs)
+export [[nodiscard]] bool operator!=(Date const& lhs, Date const& rhs)
 {
     return !(lhs == rhs);
+}
+
+// labo 4 exercise 5
+export auto operator<=>(Date const& lhs, Date const& rhs)
+{
+    return std::tuple{lhs.year().get(), lhs.month(), lhs.day().get()}
+           <=> std::tuple{rhs.year().get(), rhs.month(), rhs.day().get()};
 }
 
 // labo 4 exercise 4
