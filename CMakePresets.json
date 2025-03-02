@@ -1,0 +1,27 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 30,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "clang-debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_CXX_FLAGS": "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG -stdlib=libc++",
+                "CMAKE_EXE_LINKER_FLAGS": "-lc++ -lc++abi",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug-build",
+            "configurePreset": "clang-debug"
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+set substitute-path /project_root ${CMAKE_SOURCE_DIR}
