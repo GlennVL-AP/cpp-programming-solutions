@@ -88,6 +88,10 @@ public:
         cpprog::expect([&] { return is_valid_date(year, month, day); }, "Invalid date!");
     }
 
+    // labo 4 exercise 3
+    Date(Day day, Month month, Year year) : Date(year, month, day) {}
+    Date(Month month, Day day, Year year) : Date(year, month, day) {}
+
     [[nodiscard]] Year year() const { return year_; }
 
     [[nodiscard]] Month month() const { return month_; }
