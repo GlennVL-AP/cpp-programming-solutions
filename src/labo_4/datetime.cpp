@@ -8,11 +8,11 @@ namespace datetime {
 export class Year
 {
 public:
-    explicit Year(int year) : year_{year} {}
+    constexpr explicit Year(int year) : year_{year} {}
 
-    [[nodiscard]] int get() const { return year_; }
+    [[nodiscard]] constexpr int get() const { return year_; }
 
-    [[nodiscard]] int& get() { return year_; }
+    [[nodiscard]] constexpr int& get() { return year_; }
 
 private:
     int year_{};
@@ -21,11 +21,11 @@ private:
 export class Day
 {
 public:
-    explicit Day(int day) : day_{day} {}
+    constexpr explicit Day(int day) : day_{day} {}
 
-    [[nodiscard]] int get() const { return day_; }
+    [[nodiscard]] constexpr int get() const { return day_; }
 
-    [[nodiscard]] int& get() { return day_; }
+    [[nodiscard]] constexpr int& get() { return day_; }
 
 private:
     int day_{};
@@ -48,9 +48,34 @@ export Month operator++(Month& month)
     return month;
 }
 
-export bool is_valid_date([[maybe_unused]] Year year, [[maybe_unused]] Month month, [[maybe_unused]] Day day)
+// labo 4 exercise 1
+export constexpr bool is_leap_year(Year year)
 {
-    return true;
+    static constexpr int leap_year{4};
+    static constexpr int not_leap_year{100};
+    static constexpr int not_leap_year_exception{400};
+
+    return ((year.get() % leap_year == 0) && (year.get() % not_leap_year != 0)) || (year.get() % not_leap_year_exception == 0);
+}
+
+// labo 4 exercise 1
+export constexpr bool is_valid_date(Year year, Month month, Day day)
+{
+    static constexpr int feb_days{28};
+    static constexpr int feb_leap_days{28};
+    static constexpr std::array days_per_month{31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if ((day.get() <= 0) || (month < Month::jan) || (Month::dec < month))
+    {
+        return false;
+    }
+
+    if (month != Month::feb)
+    {
+        return day.get() <= days_per_month.at(static_cast<std::size_t>(std::to_underlying(month)) - 1);
+    }
+
+    return day.get() <= (is_leap_year(year) ? feb_leap_days : feb_days);
 }
 
 export class Date
