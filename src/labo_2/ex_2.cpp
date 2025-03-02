@@ -8,7 +8,7 @@ double mile_to_km(double mile)
 
 int main() // NOLINT(bugprone-exception-escape)
 {
-    std::println("Geef een aantal mijl: ");
+    std::print("Geef een aantal mijl: ");
 
     double miles{};
     std::cin >> miles;

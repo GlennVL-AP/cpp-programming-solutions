@@ -4,7 +4,7 @@ int main() // NOLINT(bugprone-exception-escape)
 {
     static constexpr int months_per_year{12};
 
-    std::println("Geef je voornaam en leeftijd: ");
+    std::print("Geef je voornaam en leeftijd: ");
 
     std::string first_name{};
     int age{};
