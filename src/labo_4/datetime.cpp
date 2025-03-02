@@ -33,7 +33,7 @@ private:
 
 export enum class Month { jan = 1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec };
 
-export [[nodiscard]] Month month_from_int(int month)
+export [[nodiscard]] constexpr Month month_from_int(int month)
 {
     cpprog::expect(
         [&] { return (std::to_underlying(Month::jan) <= month) && (month <= std::to_underlying(Month::dec)); }, "invalid month"
@@ -42,7 +42,7 @@ export [[nodiscard]] Month month_from_int(int month)
     return Month{month};
 }
 
-export Month& operator++(Month& month)
+export constexpr Month& operator++(Month& month)
 {
     return month = (month == Month::dec) ? Month::jan : Month{std::to_underlying(month) + 1};
 }
@@ -91,22 +91,22 @@ export [[nodiscard]] constexpr bool is_valid_date(Year year, Month month, Day da
 export class Date
 {
 public:
-    Date() = default;
+    constexpr Date() = default;
 
-    Date(Year year, Month month, Day day) : year_{year}, month_{month}, day_{day}
+    constexpr Date(Year year, Month month, Day day) : year_{year}, month_{month}, day_{day}
     {
         cpprog::expect([&] { return is_valid_date(year, month, day); }, "Invalid date!");
     }
 
     // labo 4 exercise 3
-    Date(Day day, Month month, Year year) : Date(year, month, day) {}
-    Date(Month month, Day day, Year year) : Date(year, month, day) {}
+    constexpr Date(Day day, Month month, Year year) : Date(year, month, day) {}
+    constexpr Date(Month month, Day day, Year year) : Date(year, month, day) {}
 
-    [[nodiscard]] Year year() const { return year_; }
+    [[nodiscard]] constexpr Year year() const { return year_; }
 
-    [[nodiscard]] Month month() const { return month_; }
+    [[nodiscard]] constexpr Month month() const { return month_; }
 
-    [[nodiscard]] Day day() const { return day_; }
+    [[nodiscard]] constexpr Day day() const { return day_; }
 
 private:
     static constexpr auto epoch_year{1'970};
@@ -118,25 +118,25 @@ private:
     Day day_{epoch_day};
 };
 
-export [[nodiscard]] bool operator==(Date const& lhs, Date const& rhs)
+export [[nodiscard]] constexpr bool operator==(Date const& lhs, Date const& rhs)
 {
     return (lhs.year().get() == rhs.year().get()) && (lhs.month() == rhs.month()) && (lhs.day().get() == rhs.day().get());
 }
 
-export [[nodiscard]] bool operator!=(Date const& lhs, Date const& rhs)
+export [[nodiscard]] constexpr bool operator!=(Date const& lhs, Date const& rhs)
 {
     return !(lhs == rhs);
 }
 
 // labo 4 exercise 5
-export auto operator<=>(Date const& lhs, Date const& rhs)
+export [[nodiscard]] constexpr auto operator<=>(Date const& lhs, Date const& rhs)
 {
     return std::tuple{lhs.year().get(), lhs.month(), lhs.day().get()}
            <=> std::tuple{rhs.year().get(), rhs.month(), rhs.day().get()};
 }
 
 // labo 4 exercise 4
-export Date& operator++(Date& date)
+export constexpr Date& operator++(Date& date)
 {
     auto const current_month_days = (date.month() == Month::feb) ? days_in_february(date.year()) : days_in_month(date.month());
 
@@ -158,7 +158,7 @@ export Date& operator++(Date& date)
 }
 
 // labo 4 exercise 4
-export Date& operator+=(Date& date, int days)
+export constexpr Date& operator+=(Date& date, int days)
 {
     cpprog::expect([&] { return 0 <= days; }, "Days must be positive");
 
