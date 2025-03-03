@@ -7,3 +7,4 @@ cpprog_add_executable(TARGET labo_4_ex_4 CXX_SOURCES ex_4.cpp DEPENDENCIES datet
 cpprog_add_executable(TARGET labo_4_ex_5 CXX_SOURCES ex_5.cpp DEPENDENCIES datetime)
 cpprog_add_executable(TARGET labo_4_ex_6 CXX_SOURCES ex_6.cpp DEPENDENCIES datetime)
 cpprog_add_executable(TARGET labo_4_ex_7 CXX_SOURCES ex_7.cpp DEPENDENCIES datetime)
+cpprog_add_executable(TARGET labo_4_ex_8 CXX_SOURCES ex_8.cpp)
