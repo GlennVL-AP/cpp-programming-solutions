@@ -14,6 +14,9 @@ public:
 
     [[nodiscard]] constexpr int& get() { return year_; }
 
+    // labo 4 exercise 5
+    [[nodiscard]] constexpr auto operator<=>(Year const&) const = default;
+
 private:
     int year_{};
 };
@@ -26,6 +29,9 @@ public:
     [[nodiscard]] constexpr int get() const { return day_; }
 
     [[nodiscard]] constexpr int& get() { return day_; }
+
+    // labo 4 exercise 5
+    [[nodiscard]] constexpr auto operator<=>(Day const&) const = default;
 
 private:
     int day_{};
@@ -102,6 +108,9 @@ public:
     constexpr Date(Day day, Month month, Year year) : Date(year, month, day) {}
     constexpr Date(Month month, Day day, Year year) : Date(year, month, day) {}
 
+    // labo 4 exercise 5
+    [[nodiscard]] constexpr auto operator<=>(Date const&) const = default;
+
     [[nodiscard]] constexpr Year year() const { return year_; }
 
     [[nodiscard]] constexpr Month month() const { return month_; }
@@ -118,7 +127,8 @@ private:
     Day day_{epoch_day};
 };
 
-export [[nodiscard]] constexpr bool operator==(Date const& lhs, Date const& rhs)
+// following lines are no longer needed when operator<=> is added
+/*export [[nodiscard]] constexpr bool operator==(Date const& lhs, Date const& rhs)
 {
     return (lhs.year().get() == rhs.year().get()) && (lhs.month() == rhs.month()) && (lhs.day().get() == rhs.day().get());
 }
@@ -126,14 +136,7 @@ export [[nodiscard]] constexpr bool operator==(Date const& lhs, Date const& rhs)
 export [[nodiscard]] constexpr bool operator!=(Date const& lhs, Date const& rhs)
 {
     return !(lhs == rhs);
-}
-
-// labo 4 exercise 5
-export [[nodiscard]] constexpr auto operator<=>(Date const& lhs, Date const& rhs)
-{
-    return std::tuple{lhs.year().get(), lhs.month(), lhs.day().get()}
-           <=> std::tuple{rhs.year().get(), rhs.month(), rhs.day().get()};
-}
+}*/
 
 // labo 4 exercise 4
 export constexpr Date& operator++(Date& date)
