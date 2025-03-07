@@ -4,9 +4,9 @@
         "dockerfile": "Dockerfile",
         "args": {
             "GCC_VERSION": "14",
-            "CLANG_VERSION": "19",
-            "CMAKE_VERSION": "3.31.4",
-            "CPPCHECK_VERSION": "2.16.2"
+            "CLANG_VERSION": "20",
+            "CMAKE_VERSION": "3.31.6",
+            "CPPCHECK_VERSION": "2.17.1"
         }
     },
     "customizations": {
