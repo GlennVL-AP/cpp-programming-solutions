@@ -15,18 +15,12 @@ BullsCows bulls_and_cows(std::vector<int> const& to_guess, std::vector<int> cons
 
     for (std::size_t i{0}; i < guess.size(); ++i)
     {
-        if (guess[i] == to_guess[i])
-        {
-            ++result.bulls;
-        }
+        if (guess[i] == to_guess[i]) { ++result.bulls; }
         else
         {
             for (std::size_t j{0}; j < guess.size(); ++j)
             {
-                if (guess[i] == to_guess[j])
-                {
-                    ++result.cows;
-                }
+                if (guess[i] == to_guess[j]) { ++result.cows; }
             }
         }
     }
