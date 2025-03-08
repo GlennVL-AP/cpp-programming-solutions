@@ -15,7 +15,10 @@ BullsCows bulls_and_cows(std::vector<int> const& to_guess, std::vector<int> cons
 
     for (std::size_t i{0}; i < guess.size(); ++i)
     {
-        if (guess[i] == to_guess[i]) { ++result.bulls; }
+        if (guess[i] == to_guess[i])
+        {
+            ++result.bulls;
+        }
         else
         {
             for (std::size_t j{0}; j < guess.size(); ++j)
@@ -40,7 +43,7 @@ try
         std::print("Geeft 4 getallen: ");
         std::vector<int> guess{0, 0, 0, 0};
         std::cin >> guess[0] >> guess[1] >> guess[2] >> guess[3];
-        auto result = bulls_and_cows(to_guess, guess);
+        auto const result = bulls_and_cows(to_guess, guess);
         std::println("{} bulls, {} cows", result.bulls, result.cows);
         if (result.bulls == std::ssize(to_guess)) { break; }
     }

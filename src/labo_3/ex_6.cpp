@@ -29,12 +29,18 @@ try
     double c{};
     std::cin >> a >> b >> c;
 
-    if (a == 0.0) { std::println("Vergelijking moet van de tweede graad zijn (a != 0)"); }
-    else if (auto result = solve_quadratic_equation(a, b, c))
+    if (a == 0.0)
+    {
+        std::println("Vergelijking moet van de tweede graad zijn (a != 0)");
+    }
+    else if (auto const result = solve_quadratic_equation(a, b, c))
     {
         std::println("Nulpunten: {} en {}", result->root_1, result->root_2);
     }
-    else { std::println("Geen nulpunten!"); }
+    else
+    {
+        std::println("Geen nulpunten!");
+    }
 
     return 0;
 }

@@ -11,7 +11,6 @@ public:
     constexpr explicit Year(int year) : year_{year} {}
 
     [[nodiscard]] constexpr int get() const { return year_; }
-
     [[nodiscard]] constexpr int& get() { return year_; }
 
     // labo 4 exercise 5
@@ -27,7 +26,6 @@ public:
     constexpr explicit Day(int day) : day_{day} {}
 
     [[nodiscard]] constexpr int get() const { return day_; }
-
     [[nodiscard]] constexpr int& get() { return day_; }
 
     // labo 4 exercise 5
@@ -112,9 +110,7 @@ public:
     [[nodiscard]] constexpr auto operator<=>(Date const&) const = default;
 
     [[nodiscard]] constexpr Year year() const { return year_; }
-
     [[nodiscard]] constexpr Month month() const { return month_; }
-
     [[nodiscard]] constexpr Day day() const { return day_; }
 
 private:
