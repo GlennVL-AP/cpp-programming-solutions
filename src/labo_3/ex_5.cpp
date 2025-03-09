@@ -8,14 +8,7 @@ try
     std::println("Geef een reeks woorden:");
     for (std::string word{}; std::cin >> word;)
     {
-        if (word_counts.contains(word))
-        {
-            ++word_counts[word];
-        }
-        else
-        {
-            word_counts[word] = 1;
-        }
+        ++word_counts[word];
     }
 
     for (auto const& [word, count] : word_counts)
