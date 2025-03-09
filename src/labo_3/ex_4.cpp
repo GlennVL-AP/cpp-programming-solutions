@@ -13,18 +13,28 @@ BullsCows bulls_and_cows(std::vector<int> const& to_guess, std::vector<int> cons
 
     BullsCows result{};
 
-    for (std::size_t i{0}; i < guess.size(); ++i)
+    std::unordered_map<int, int> to_guess_not_bull{};
+    std::vector<int> guess_not_bull{};
+
+    for (auto const& [number_to_guess, guessed_number] : std::views::zip(to_guess, guess))
     {
-        if (guess[i] == to_guess[i])
+        if (number_to_guess == guessed_number)
         {
             ++result.bulls;
         }
         else
         {
-            for (std::size_t j{0}; j < guess.size(); ++j)
-            {
-                if (guess[i] == to_guess[j]) { ++result.cows; }
-            }
+            ++to_guess_not_bull[number_to_guess];
+            guess_not_bull.push_back(guessed_number);
+        }
+    }
+
+    for (auto const& guessed_number : guess_not_bull)
+    {
+        if (0 < to_guess_not_bull[guessed_number])
+        {
+            ++result.cows;
+            --to_guess_not_bull[guessed_number];
         }
     }
 
