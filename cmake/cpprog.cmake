@@ -22,7 +22,7 @@ macro(_cpprog_enable_modules)
 endmacro()
 
 macro(_cpprog_set_cxx_standard)
-    set(CMAKE_CXX_STANDARD 23)
+    set(CMAKE_CXX_STANDARD 26)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endmacro()
