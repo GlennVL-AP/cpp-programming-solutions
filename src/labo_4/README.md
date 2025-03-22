@@ -1,4 +1,4 @@
-# Labo 4 Assignments
+# Labo 4 Exercises
 
 1. Implementeer de `is_valid_date()` functie in `datetime.cpp`. Schrijf een programmatje waarin je wat geldige en ongeldige datums uittest. Hou ook rekening met [schrikkeljaren](https://nl.wikipedia.org/wiki/Schrikkeljaar). Voor het controleren van het aantal dagen in een gewone maand, maak je gebruik van een compile time constante array. Je kan bijvoorbeeld een array maken waar je als index de maand gebruikt en als waarde het aantal dagen. Of een array die de maanden met 30 dagen bevat en een array die de maanden met 31 dagen bevat.
 2. Maak een programmatje dat aan de gebruiker een jaar, maand, en dag vraagt. Maak dan een `Date` object aan en print de datum op het scherm. Voor je het object aanmaakt controleer je of de datum geldig is aan de hand van de `is_valid_date()` functie. Als de datum ongeldig is, print je dit op het scherm.
