@@ -61,6 +61,8 @@ export [[nodiscard]] constexpr bool is_leap_year(Year year)
     return ((year.get() % leap_year == 0) && (year.get() % not_leap_year != 0)) || (year.get() % not_leap_year_exception == 0);
 }
 
+namespace {
+
 // labo 4 exercise 1
 [[nodiscard]] constexpr int days_in_month(Month month)
 {
@@ -80,6 +82,8 @@ export [[nodiscard]] constexpr bool is_leap_year(Year year)
 
     return is_leap_year(year) ? feb_leap_days : feb_days;
 }
+
+} // namespace
 
 // labo 4 exercise 1
 export [[nodiscard]] constexpr bool is_valid_date(Year year, Month month, Day day)

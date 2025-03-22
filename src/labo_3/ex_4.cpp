@@ -1,6 +1,8 @@
 import cpprog;
 import std;
 
+namespace {
+
 struct BullsCows
 {
     int bulls{};
@@ -40,6 +42,8 @@ BullsCows bulls_and_cows(std::vector<int> const& to_guess, std::vector<int> cons
 
     return result;
 }
+
+} // namespace
 
 int main()
 try

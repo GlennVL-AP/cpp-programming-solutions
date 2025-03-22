@@ -1,6 +1,8 @@
 import cpprog;
 import std;
 
+namespace {
+
 constexpr double kelvin_offset{273.15};
 
 double ctok(double celsius)
@@ -14,6 +16,8 @@ double ktoc(double kelvin)
     cpprog::expect([&] { return 0 <= kelvin; }, "Temperature can't be below absolute zero!");
     return kelvin - kelvin_offset;
 }
+
+} // namespace
 
 int main()
 try

@@ -1,10 +1,14 @@
 import std;
 
+namespace {
+
 double mile_to_km(double mile)
 {
     static constexpr double km_per_mile{1.609};
     return mile * km_per_mile;
 }
+
+} // namespace
 
 int main() // NOLINT(bugprone-exception-escape)
 {

@@ -3,6 +3,8 @@
 import cpprog;
 import std;
 
+namespace {
+
 struct Roots
 {
     double root_1{};
@@ -19,6 +21,8 @@ std::optional<Roots> solve_quadratic_equation(double a, double b, double c)
     double const sqrted{std::sqrt(to_sqrt)};
     return Roots{.root_1 = (-b + sqrted) / (2 * a), .root_2 = (-b - sqrted) / (2 * a)};
 }
+
+} // namespace
 
 int main()
 try

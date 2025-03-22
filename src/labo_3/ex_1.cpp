@@ -1,10 +1,14 @@
 import std;
 
+namespace {
+
 double ctok(double celsius)
 {
     static constexpr double kelvin_offset{273.15};
     return celsius + kelvin_offset;
 }
+
+} // namespace
 
 int main()
 try
