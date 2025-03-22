@@ -45,7 +45,7 @@ CheckOptions:
   value: lower_case
 - key: readability-identifier-naming.IgnoreMainLikeFunctions
   value: true
-- key: readability-identifier-naming.MAcroDefinitionCase
+- key: readability-identifier-naming.MacroDefinitionCase
   value: UPPER_CASE
 - key: readability-identifier-naming.MemberCase
   value: lower_case
