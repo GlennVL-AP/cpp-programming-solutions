@@ -59,6 +59,7 @@ function(cpprog_add_executable)
     target_sources(${arg_TARGET} PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
     target_link_libraries(${arg_TARGET} PRIVATE ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options(TARGET ${arg_TARGET})
+    _cppprog_enable_sanitizers(TARGET ${arg_TARGET})
     _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
 endfunction()
 
@@ -83,6 +84,7 @@ function(cpprog_add_library)
     target_sources(${arg_TARGET} PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES})
     target_link_libraries(${arg_TARGET} PRIVATE ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options(TARGET ${arg_TARGET})
+    _cppprog_enable_sanitizers(TARGET ${arg_TARGET})
     _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
 endfunction()
 
@@ -97,6 +99,20 @@ function(_cpprog_set_compiler_options)
         "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wdouble-promotion;-Wextra-semi;-Wnon-virtual-dtor"
         "-Wold-style-cast;-Wcast-align;-Wunused;-Woverloaded-virtual;-Wnull-dereference;-Wimplicit-fallthrough;-Wformat=2"
         "-Werror"
+    )
+endfunction()
+
+function(_cppprog_enable_sanitizers)
+    set(options)
+    set(oneValueArgs TARGET)
+    set(multiValueArgs)
+    cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
+
+    target_compile_options(${arg_TARGET} PRIVATE
+        "$<$<CONFIG:Debug>:-fsanitize=address,undefined;-fno-omit-frame-pointer>"
+    )
+    target_link_options(${arg_TARGET} PRIVATE
+        "$<$<CONFIG:Debug>:-fsanitize=address,undefined>"
     )
 endfunction()
 
