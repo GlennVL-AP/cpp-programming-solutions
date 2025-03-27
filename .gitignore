@@ -5,6 +5,7 @@ cmake-build-*/
 conan-cache/
 vcpkg_installed/
 venv/
+Testing/
 
 # User specific settings
 CMakeUserPresets.json
