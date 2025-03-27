@@ -31,12 +31,25 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
+        },
+        {
+            "name": "clang-release",
+            "inherits": "x64-linux-clang",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
         {
             "name": "clang-debug-build",
             "configurePreset": "clang-debug"
+        },
+        {
+            "name": "clang-debug-release",
+            "configurePreset": "clang-release"
+        }
+    ],
         }
     ]
 }
