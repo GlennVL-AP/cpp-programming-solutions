@@ -46,7 +46,7 @@
             "configurePreset": "clang-debug"
         },
         {
-            "name": "clang-debug-release",
+            "name": "clang-release-build",
             "configurePreset": "clang-release"
         }
     ],
