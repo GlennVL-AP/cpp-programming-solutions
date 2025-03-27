@@ -50,6 +50,10 @@
             "configurePreset": "clang-release"
         }
     ],
+    "testPresets": [
+        {
+            "name": "clang-debug-test",
+            "configurePreset": "clang-debug"
         }
     ]
 }
