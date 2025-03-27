@@ -7,13 +7,28 @@
     },
     "configurePresets": [
         {
-            "name": "clang-debug",
+            "name": "vcpkg",
+            "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-                "CMAKE_CXX_FLAGS": "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG -stdlib=libc++",
-                "CMAKE_EXE_LINKER_FLAGS": "-lc++ -lc++abi",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake"
+            }
+        },
+        {
+            "name": "x64-linux-clang",
+            "hidden": true,
+            "inherits": "vcpkg",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-linux-clang-libcxx",
+                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/cmake/x64-linux-clang-libcxx.toolchain.cmake"
+            }
+        },
+        {
+            "name": "clang-debug",
+            "inherits": "x64-linux-clang",
+            "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         }
