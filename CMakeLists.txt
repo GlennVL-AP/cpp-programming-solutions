@@ -7,3 +7,7 @@ cpprog_init()
 project(CppProgLaboSolutions LANGUAGES CXX)
 
 add_subdirectory(src)
+
+include(CTest)
+enable_testing()
+add_subdirectory(tests)
