@@ -36,9 +36,9 @@ TEST_CASE("test fibonacci implementation with cache", "[fibonacci][labo_7]")
         REQUIRE(fib_loop(9) == 34);
     }
 
-    SECTION("largest fibonacci number that fits in an integer")
+    SECTION("largest fibonacci number that fits in a 64 bit integer")
     {
-        REQUIRE(fib_recursive(46) == 1'836'311'903);
+        REQUIRE(fib_loop(92) == 7'540'113'804'746'346'429);
     }
 }
 
@@ -75,9 +75,9 @@ TEST_CASE("test recursive fibonacci implementation with cache", "[fibonacci][lab
         REQUIRE(fib_recursive(9) == 34);
     }
 
-    SECTION("largest fibonacci number that fits in an integer")
+    SECTION("largest fibonacci number that fits in a 64 bit integer")
     {
-        REQUIRE(fib_recursive(46) == 1'836'311'903);
+        REQUIRE(fib_recursive(92) == 7'540'113'804'746'346'429);
     }
 }
 
@@ -85,11 +85,11 @@ TEST_CASE("benchmark fibonacci", "[!benchmark][fibonacci][labo_7]")
 {
     BENCHMARK("fibonacci implementation with loop and cache")
     {
-        return fib_loop(46);
+        return fib_loop(92);
     };
 
     BENCHMARK("recursive fibonacci implementation with cache")
     {
-        return fib_recursive(46);
+        return fib_recursive(92);
     };
 }

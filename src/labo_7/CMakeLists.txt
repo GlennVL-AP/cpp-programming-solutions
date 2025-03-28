@@ -3,3 +3,4 @@ cpprog_add_executable(TARGET labo_7_ex_1 CXX_SOURCES ex_1_main.cpp DEPENDENCIES 
 cpprog_add_library(TARGET labo_7_ex_2_lib CXX_MODULES ex_2_fibonacci.cpp)
 cpprog_add_executable(TARGET labo_7_ex_2 CXX_SOURCES ex_2_main.cpp DEPENDENCIES labo_7_ex_2_lib)
 cpprog_add_executable(TARGET labo_7_ex_3 CXX_SOURCES ex_3.cpp)
+cpprog_add_executable(TARGET labo_7_ex_4 CXX_SOURCES ex_4.cpp DEPENDENCIES labo_7_ex_2_lib)
