@@ -7,12 +7,10 @@ namespace {
 
 int fib_loop_impl(int number)
 {
-    if (number == 0) { return 0; }
-    if (number == 1) { return 1; }
-    if (number == 2) { return 1; }
+    if (number < 2) { return number; }
 
     int result{0};
-    for (int first{1}, second{1}, i{3}; i <= number; ++i)
+    for (int first{0}, second{1}, i{2}; i <= number; ++i)
     {
         result = first + second;
         first = second;

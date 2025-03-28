@@ -80,3 +80,16 @@ TEST_CASE("test recursive fibonacci implementation with cache", "[fibonacci][lab
         REQUIRE(fib_recursive(46) == 1'836'311'903);
     }
 }
+
+TEST_CASE("benchmark fibonacci", "[!benchmark][fibonacci][labo_7]")
+{
+    BENCHMARK("fibonacci implementation with loop and cache")
+    {
+        return fib_loop(46);
+    };
+
+    BENCHMARK("recursive fibonacci implementation with cache")
+    {
+        return fib_recursive(46);
+    };
+}
