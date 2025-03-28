@@ -3,4 +3,12 @@ include(Catch)
 
 cpprog_add_test(TARGET test_cpprog CXX_SOURCES "cpprog.test.cpp")
 cpprog_add_test(TARGET test_labo4_datetime CXX_SOURCES "labo4_datetime.test.cpp" DEPENDENCIES datetime)
-cpprog_add_test(TARGET test_labo7_fibonacci CXX_SOURCES "labo7_fibonacci.test.cpp" DEPENDENCIES fibonacci)
+cpprog_add_test(
+    TARGET test_labo7
+    CXX_SOURCES
+    "labo7_containsnumber.test.cpp"
+    "labo7_fibonacci.test.cpp"
+    DEPENDENCIES
+    labo_7_ex_1_lib
+    labo_7_ex_2_lib
+)
