@@ -2,4 +2,5 @@ find_package(Catch2 CONFIG REQUIRED)
 include(Catch)
 
 cpprog_add_test(TARGET test_cpprog CXX_SOURCES "cpprog.test.cpp")
-cpprog_add_test(TARGET test_datetime CXX_SOURCES "datetime.test.cpp" DEPENDENCIES datetime)
+cpprog_add_test(TARGET test_labo4_datetime CXX_SOURCES "labo4_datetime.test.cpp" DEPENDENCIES datetime)
+cpprog_add_test(TARGET test_labo7_fibonacci CXX_SOURCES "labo7_fibonacci.test.cpp" DEPENDENCIES fibonacci)

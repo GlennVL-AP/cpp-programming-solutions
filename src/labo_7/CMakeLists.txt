@@ -1,0 +1,2 @@
+cpprog_add_library(TARGET fibonacci CXX_MODULES ex_2_fibonacci.cpp)
+cpprog_add_executable(TARGET labo_7_ex_2 CXX_SOURCES ex_2_main.cpp DEPENDENCIES fibonacci)
