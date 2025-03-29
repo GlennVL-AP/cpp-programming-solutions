@@ -14,7 +14,7 @@ macro(_cpprog_generate_compile_commands)
 endmacro()
 
 macro(_cpprog_enable_modules)
-    set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "0e5b6991-d74f-4b3d-a41c-cf096e0b2508")
+    set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "a9e1cf81-9932-4810-974b-6eccaf14e457")
     set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP ON)
     set(CMAKE_EXPERIMENTAL_CXX_MODULE_MAP_FORMAT clang)
     set(CMAKE_CXX_MODULE_STD ON)
