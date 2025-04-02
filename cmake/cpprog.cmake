@@ -40,8 +40,8 @@ endmacro()
 
 function(cpprog_add_executable)
     set(options)
-    set(oneValueArgs TARGET CXX_SOURCES)
-    set(multiValueArgs CXX_MODULES DEPENDENCIES)
+    set(oneValueArgs TARGET)
+    set(multiValueArgs CXX_MODULES CXX_SOURCES DEPENDENCIES)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
@@ -49,6 +49,11 @@ function(cpprog_add_executable)
     endif()
     if(NOT arg_CXX_SOURCES)
         message(FATAL_ERROR "Missing argument CXX_SOURCES. At least a source file with main function is required!")
+    endif()
+
+    list(LENGTH arg_CXX_SOURCES cpprog_NUM_SOURCES)
+    if(cpprog_NUM_SOURCES GREATER 1)
+        message(WARNING "There should only be one source file with main function. Other sources should be modules.")
     endif()
 
     list(APPEND arg_DEPENDENCIES cpprog)
