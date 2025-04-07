@@ -111,7 +111,7 @@ function(cpprog_add_test)
     target_link_libraries(${arg_TARGET} PRIVATE Catch2::Catch2WithMain cpprog ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options(TARGET ${arg_TARGET})
     _cppprog_enable_sanitizers(TARGET ${arg_TARGET})
-    catch_discover_tests(${arg_TARGET} REPORTER compact)
+    catch_discover_tests(${arg_TARGET} TEST_PREFIX "${arg_TARGET}." REPORTER compact)
 endfunction()
 
 function(_cpprog_set_compiler_options)
