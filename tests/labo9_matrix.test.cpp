@@ -1,14 +1,14 @@
 #include <catch.hpp>
 
 import cpprog;
-import std;
 import matrix;
+import std;
 
 TEST_CASE("test creating matrix", "[labo_9][matrix]")
 {
     SECTION("default constructed matrix is all zero")
     {
-        constexpr Matrix<double, 2, 3> mx_1{};
+        constexpr linalg::Matrix<double, 2, 3> mx_1{};
         for (int i{0}; i < 2; ++i)
         {
             for (int j{0}; j < 3; ++j)
@@ -17,7 +17,7 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
             }
         }
 
-        constexpr Matrix<int, 4, 5> mx_2{};
+        constexpr linalg::Matrix<int, 4, 5> mx_2{};
         for (int i{0}; i < 4; ++i)
         {
             for (int j{0}; j < 5; ++j)
@@ -30,7 +30,7 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
     SECTION("fill matrix with value")
     {
         constexpr std::complex value{std::numbers::e, std::numbers::pi};
-        constexpr Matrix<std::complex<double>, 6, 7> mx(value);
+        constexpr linalg::Matrix<std::complex<double>, 6, 7> mx(value);
 
         for (int i{0}; i < 6; ++i)
         {
@@ -43,7 +43,7 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
 
     SECTION("construct matrix from intializer list")
     {
-        constexpr Matrix<double, 3, 2> mx{
+        constexpr linalg::Matrix<double, 3, 2> mx{
             1.0, 2.0,
             3.0, 4.0,
             5.0, 6.0
@@ -60,7 +60,7 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
     SECTION("attempt to construct matrix from wrong size initializer list")
     {
         REQUIRE_THROWS_MATCHES(
-            (Matrix<double, 3, 2>{1.0, 2.0, 3.0}),
+            (linalg::Matrix<double, 3, 2>{1.0, 2.0, 3.0}),
             cpprog::ExpectError,
             Catch::Matchers::MessageMatches(Catch::Matchers::EndsWith("requires MxN items"))
         );
@@ -68,7 +68,7 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
 
     SECTION("attempt to access invalid index")
     {
-        constexpr Matrix<double, 3, 2> mx{
+        constexpr linalg::Matrix<double, 3, 2> mx{
             1.0, 2.0,
             3.0, 4.0,
             5.0, 6.0
@@ -102,13 +102,13 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
 
 TEST_CASE("test comparing matrices", "[labo_9][matrix]")
 {
-    constexpr Matrix<double, 3, 2> mx_1{
+    constexpr linalg::Matrix<double, 3, 2> mx_1{
         1.0, 2.0,
         3.0, 4.0,
         5.0, 6.0
     };
 
-    constexpr Matrix<double, 3, 2> mx_2{
+    constexpr linalg::Matrix<double, 3, 2> mx_2{
         1.0, 2.0,
         4.0, 3.0,
         5.0, 6.0
@@ -130,26 +130,26 @@ TEST_CASE("test comparing matrices", "[labo_9][matrix]")
 
 TEST_CASE("test matrix arithmetic", "[labo_9][matrix]")
 {
-    constexpr Matrix<int, 3, 2> mx_1{
+    constexpr linalg::Matrix<int, 3, 2> mx_1{
         1, 2,
         3, 4,
         5, 6
     };
 
-    constexpr Matrix<int, 3, 2> mx_2{
+    constexpr linalg::Matrix<int, 3, 2> mx_2{
         7, 8,
         9, 10,
         11, 12
     };
 
-    constexpr Matrix<int, 2, 3> mx_3{
+    constexpr linalg::Matrix<int, 2, 3> mx_3{
         1, 2, 3,
         4, 5, 6
     };
 
     SECTION("addition")
     {
-        constexpr Matrix<int, 3, 2> expected{
+        constexpr linalg::Matrix<int, 3, 2> expected{
             8, 10,
             12, 14,
             16, 18
@@ -160,7 +160,7 @@ TEST_CASE("test matrix arithmetic", "[labo_9][matrix]")
 
     SECTION("subtraction")
     {
-        constexpr Matrix<int, 3, 2> expected{
+        constexpr linalg::Matrix<int, 3, 2> expected{
             -6, -6,
             -6, -6,
             -6, -6
@@ -169,9 +169,9 @@ TEST_CASE("test matrix arithmetic", "[labo_9][matrix]")
         STATIC_REQUIRE(mx_1 - mx_2 == expected);
     }
 
-    SECTION("matrix multiplication")
+    SECTION("linalg::Matrix multiplication")
     {
-        constexpr Matrix<int, 3, 3> expected{
+        constexpr linalg::Matrix<int, 3, 3> expected{
             9, 12, 15,
             19, 26, 33,
             29, 40, 51
@@ -182,7 +182,7 @@ TEST_CASE("test matrix arithmetic", "[labo_9][matrix]")
 
     SECTION("multiply by scaler")
     {
-        constexpr Matrix<int, 2, 3> expected{
+        constexpr linalg::Matrix<int, 2, 3> expected{
             2, 4, 6,
             8, 10, 12
         };
@@ -195,7 +195,7 @@ TEST_CASE("test calculating determinant", "[labo_9][matrix]")
 {
     SECTION("two by two matrix")
     {
-        constexpr Matrix<double, 2, 2> mx{
+        constexpr linalg::Matrix<double, 2, 2> mx{
             1.0, 2.0,
             3.0, 4.0
         };
@@ -205,7 +205,7 @@ TEST_CASE("test calculating determinant", "[labo_9][matrix]")
 
     SECTION("four by four matrix")
     {
-        constexpr Matrix<double, 3, 3> mx{
+        constexpr linalg::Matrix<double, 3, 3> mx{
             1.0, 2.0, 3.0,
             4.0, 5.0, 6.0,
             7.0, 8.0, 9.0
@@ -217,13 +217,13 @@ TEST_CASE("test calculating determinant", "[labo_9][matrix]")
 
 TEST_CASE("test transposing matrices", "[labo_9][matrix]")
 {
-    constexpr Matrix<double, 3, 2> mx_1{
+    constexpr linalg::Matrix<double, 3, 2> mx_1{
         1.0, 2.0,
         3.0, 4.0,
         5.0, 6.0
     };
 
-    constexpr Matrix<double, 2, 3> mx_2{
+    constexpr linalg::Matrix<double, 2, 3> mx_2{
         1.0, 3.0, 5.0,
         2.0, 4.0, 6.0
     };

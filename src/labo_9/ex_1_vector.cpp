@@ -3,6 +3,8 @@ export module vector3d;
 import std;
 import cpprog;
 
+namespace linalg {
+
 template <typename T>
 concept NumericType = std::is_arithmetic_v<T>;
 
@@ -180,3 +182,5 @@ constexpr Vector3D<T> operator*(Vector3D<T> const& lhs, T scalar)
     result *= scalar;
     return result;
 }
+
+} // namespace linalg

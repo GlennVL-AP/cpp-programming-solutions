@@ -3,6 +3,8 @@ export module matrix;
 import std;
 import cpprog;
 
+namespace linalg {
+
 template <typename T>
 concept NumericType = true;
 
@@ -216,3 +218,5 @@ export template <typename T, int M, int N>
 
     return result;
 }
+
+} // namespace linalg

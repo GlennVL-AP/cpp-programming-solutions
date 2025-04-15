@@ -6,11 +6,11 @@ import std;
 int main()
 try
 {
-    Vector3D vec_1{X{1.1}, Y{2.2}, Z{3.3}};
-    Vector3D vec_2{X{3.3}, Y{1.1}, Z{2.2}};
-    Vector3D vec_3{vec_1 + vec_2};
-    Vector3D vec_4{vec_1 - vec_2};
-    Vector3D vec_5{vec_4 * std::numbers::pi};
+    linalg::Vector3D vec_1{linalg::X{1.1}, linalg::Y{2.2}, linalg::Z{3.3}};
+    linalg::Vector3D vec_2{linalg::X{3.3}, linalg::Y{1.1}, linalg::Z{2.2}};
+    linalg::Vector3D vec_3{vec_1 + vec_2};
+    linalg::Vector3D vec_4{vec_1 - vec_2};
+    linalg::Vector3D vec_5{vec_4 * std::numbers::pi};
 
     vec_1 += vec_2;
     vec_2 -= vec_3;

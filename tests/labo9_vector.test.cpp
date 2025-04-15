@@ -6,8 +6,8 @@ import vector3d;
 
 TEST_CASE("test vector of doubles", "[labo_9][vector3d]")
 {
-    constexpr Vector3D test_vec_1{X{1.0}, Y{2.0}, Z{3.0}};
-    constexpr Vector3D test_vec_2{X{3.0}, Y{1.0}, Z{2.0}};
+    constexpr linalg::Vector3D test_vec_1{linalg::X{1.0}, linalg::Y{2.0}, linalg::Z{3.0}};
+    constexpr linalg::Vector3D test_vec_2{linalg::X{3.0}, linalg::Y{1.0}, linalg::Z{2.0}};
 
     SECTION("access values using the index operator")
     {
@@ -63,8 +63,8 @@ TEST_CASE("test vector of doubles", "[labo_9][vector3d]")
 
 TEST_CASE("test vector of integers", "[labo_9][vector3d]")
 {
-    constexpr Vector3D test_vec_1{X{1}, Y{2}, Z{3}};
-    constexpr Vector3D test_vec_2{X{3}, Y{1}, Z{2}};
+    constexpr linalg::Vector3D test_vec_1{linalg::X{1}, linalg::Y{2}, linalg::Z{3}};
+    constexpr linalg::Vector3D test_vec_2{linalg::X{3}, linalg::Y{1}, linalg::Z{2}};
 
     SECTION("access values using the index operator")
     {
