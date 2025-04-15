@@ -37,6 +37,7 @@ cpprog_add_test(
     TARGET test_labo9
     CXX_SOURCES
     "labo9_vector.test.cpp"
+    "labo9_matrix.test.cpp"
     DEPENDENCIES
     labo_9_lib
 )
