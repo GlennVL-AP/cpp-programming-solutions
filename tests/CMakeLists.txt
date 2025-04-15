@@ -32,3 +32,11 @@ cpprog_add_test(
     DEPENDENCIES
     labo_8_datetime
 )
+
+cpprog_add_test(
+    TARGET test_labo9
+    CXX_SOURCES
+    "labo9_vector.test.cpp"
+    DEPENDENCIES
+    labo_9_lib
+)

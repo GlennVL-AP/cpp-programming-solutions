@@ -113,7 +113,7 @@ export constexpr Vector3D& operator+=(Vector3D& lhs, Vector3D const& rhs)
 {
     lhs.x().get() += rhs.x().get();
     lhs.y().get() += rhs.y().get();
-    lhs.z().get() += rhs.y().get();
+    lhs.z().get() += rhs.z().get();
 
     return lhs;
 }
