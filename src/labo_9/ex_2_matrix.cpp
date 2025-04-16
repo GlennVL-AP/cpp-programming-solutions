@@ -6,9 +6,18 @@ import cpprog;
 namespace linalg {
 
 template <typename T>
-concept NumericType = true;
+concept Arithmetic = requires(T first, T second) {
+    { -first } -> std::same_as<T>;
+    { first + second } -> std::same_as<T>;
+    { first - second } -> std::same_as<T>;
+    { first * second } -> std::same_as<T>;
+    { first == second } -> std::convertible_to<bool>;
+};
 
-export template <NumericType T, int M, int N>
+template <typename T>
+concept NumberLike = std::default_initializable<T> && std::constructible_from<T, int> && std::swappable<T> && Arithmetic<T>;
+
+export template <NumberLike T, int M, int N>
 requires (0 < M) && (0 < N)
 class Matrix
 {

@@ -6,9 +6,9 @@ import cpprog;
 namespace linalg {
 
 template <typename T>
-concept NumericType = std::is_arithmetic_v<T>;
+concept NumberLike = std::integral<T> || std::floating_point<T>;
 
-export template <NumericType T>
+export template <NumberLike T>
 class X
 {
     using ValueType = T;
@@ -28,7 +28,7 @@ private:
     ValueType value_{};
 };
 
-export template <NumericType T>
+export template <NumberLike T>
 class Y
 {
     using ValueType = T;
@@ -48,7 +48,7 @@ private:
     ValueType value_{};
 };
 
-export template <NumericType T>
+export template <NumberLike T>
 class Z
 {
     using ValueType = T;
@@ -68,7 +68,7 @@ private:
     ValueType value_{};
 };
 
-export template <NumericType T>
+export template <NumberLike T>
 class Vector3D
 {
     using ValueType = T;
@@ -117,19 +117,19 @@ private:
     Z<ValueType> z_;
 };
 
-export template <NumericType T>
+export template <typename T>
 [[nodiscard]] constexpr bool operator==(Vector3D<T> const& lhs, Vector3D<T> const& rhs)
 {
     return (lhs.x() == rhs.x()) && (lhs.y() == rhs.y()) && (lhs.z() == rhs.z());
 }
 
-export template <NumericType T>
+export template <typename T>
 [[nodiscard]] constexpr bool operator!=(Vector3D<T> const& lhs, Vector3D<T> const& rhs)
 {
     return !(lhs == rhs);
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T>& operator+=(Vector3D<T>& lhs, Vector3D<T> const& rhs)
 {
     lhs.x().get() += rhs.x().get();
@@ -139,7 +139,7 @@ constexpr Vector3D<T>& operator+=(Vector3D<T>& lhs, Vector3D<T> const& rhs)
     return lhs;
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T> operator+(Vector3D<T> const& lhs, Vector3D<T> const& rhs)
 {
     Vector3D<T> result{lhs};
@@ -147,25 +147,25 @@ constexpr Vector3D<T> operator+(Vector3D<T> const& lhs, Vector3D<T> const& rhs)
     return result;
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T> operator-(Vector3D<T> const& vec)
 {
     return {X{-(vec.x().get())}, Y{-(vec.y().get())}, Z{-(vec.z().get())}};
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T>& operator-=(Vector3D<T>& lhs, Vector3D<T> const& rhs)
 {
     return lhs += -rhs;
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T> operator-(Vector3D<T> const& lhs, Vector3D<T> const& rhs)
 {
     return lhs + -rhs;
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T>& operator*=(Vector3D<T>& lhs, T scalar)
 {
     lhs.x().get() *= scalar;
@@ -175,7 +175,7 @@ constexpr Vector3D<T>& operator*=(Vector3D<T>& lhs, T scalar)
     return lhs;
 }
 
-export template <NumericType T>
+export template <typename T>
 constexpr Vector3D<T> operator*(Vector3D<T> const& lhs, T scalar)
 {
     Vector3D<T> result{lhs};
