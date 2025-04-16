@@ -43,7 +43,7 @@ public:
         cpprog::expect([&]{ return (0 <= i_index) && (i_index < M); }, "0 <= i < M");
         cpprog::expect([&]{ return (0 <= j_index) && (j_index < N); }, "0 <= j < N");
 
-        return data_[static_cast<std::size_t>((i_index * N) + j_index)];
+        return data_[make_index(i_index, j_index)];
     }
 
     [[nodiscard]] constexpr ValueType& operator[](int i_index, int j_index)
@@ -51,11 +51,44 @@ public:
         cpprog::expect([&]{ return (0 <= i_index) && (i_index < M); }, "0 <= i < M");
         cpprog::expect([&]{ return (0 <= j_index) && (j_index < N); }, "0 <= j < N");
 
-        return data_[static_cast<std::size_t>((i_index * N) + j_index)];
+        return data_[make_index(i_index, j_index)];
+    }
+
+    [[nodiscard]] constexpr std::array<ValueType, N> row(int row_index) const
+    {
+        cpprog::expect([&]{ return (0 <= row_index) && (row_index < M); }, "0 <= row_index < M");
+
+        std::array<ValueType, N> result;
+
+        for (int i{0}; i < N; ++i)
+        {
+            result[static_cast<std::size_t>(i)] = data_[make_index(row_index, i)];
+        }
+
+        return result;
+    }
+
+    [[nodiscard]] constexpr std::array<ValueType, M> column(int col_index) const
+    {
+        cpprog::expect([&]{ return (0 <= col_index) && (col_index < N); }, "0 <= col_index < N");
+
+        std::array<ValueType, M> result;
+
+        for (int i{0}; i < M; ++i)
+        {
+            result[static_cast<std::size_t>(i)] = data_[make_index(i, col_index)];
+        }
+
+        return result;
     }
 
 private:
     std::array<ValueType, static_cast<std::size_t>(M*N)> data_{};
+
+    static constexpr std::size_t make_index(int i_index, int j_index)
+    {
+        return static_cast<std::size_t>((i_index * N) + j_index);
+    }
 };
 
 export template <typename T, int M, int N>

@@ -100,6 +100,58 @@ TEST_CASE("test creating matrix", "[labo_9][matrix]")
     }
 }
 
+TEST_CASE("test getting matrix rows and columns", "[labo_9][matrix]")
+{
+    constexpr linalg::Matrix<double, 3, 2> mx{
+        1.0, 2.0,
+        3.0, 4.0,
+        5.0, 6.0
+    };
+
+    SECTION("test getting rows")
+    {
+        STATIC_REQUIRE(mx.row(0) == std::array{1.0, 2.0});
+        STATIC_REQUIRE(mx.row(1) == std::array{3.0, 4.0});
+        STATIC_REQUIRE(mx.row(2) == std::array{5.0, 6.0});
+    }
+
+    SECTION("attempt to get invalid row")
+    {
+        REQUIRE_THROWS_MATCHES(
+            mx.row(-1),
+            cpprog::ExpectError,
+            Catch::Matchers::MessageMatches(Catch::Matchers::EndsWith("0 <= row_index < M"))
+        );
+
+        REQUIRE_THROWS_MATCHES(
+            mx.row(3),
+            cpprog::ExpectError,
+            Catch::Matchers::MessageMatches(Catch::Matchers::EndsWith("0 <= row_index < M"))
+        );
+    }
+
+    SECTION("test getting columns")
+    {
+        STATIC_REQUIRE(mx.column(0) == std::array{1.0, 3.0, 5.0});
+        STATIC_REQUIRE(mx.column(1) == std::array{2.0, 4.0, 6.0});
+    }
+
+    SECTION("attempt to get invalid column")
+    {
+        REQUIRE_THROWS_MATCHES(
+            mx.column(-1),
+            cpprog::ExpectError,
+            Catch::Matchers::MessageMatches(Catch::Matchers::EndsWith("0 <= col_index < N"))
+        );
+
+        REQUIRE_THROWS_MATCHES(
+            mx.column(2),
+            cpprog::ExpectError,
+            Catch::Matchers::MessageMatches(Catch::Matchers::EndsWith("0 <= col_index < N"))
+        );
+    }
+}
+
 TEST_CASE("test comparing matrices", "[labo_9][matrix]")
 {
     constexpr linalg::Matrix<double, 3, 2> mx_1{
