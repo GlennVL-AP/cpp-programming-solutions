@@ -5,7 +5,7 @@
         "args": {
             "GCC_VERSION": "15",
             "CLANG_VERSION": "20",
-            "CMAKE_VERSION": "4.0.0",
+            "CMAKE_VERSION": "4.0.1",
             "CPPCHECK_VERSION": "2.17.1"
         }
     },
