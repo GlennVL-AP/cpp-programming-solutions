@@ -148,18 +148,20 @@ function(_cpprog_enable_clangtidy)
     set(multiValueArgs DEPENDENCIES)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
-    get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
 
-    set(cpprog_CLANG_TIDY
-        ${CLANG_TIDY}
-        --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
-        --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
-    )
+        set(cpprog_CLANG_TIDY
+            ${CLANG_TIDY}
+            --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
+            --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
+        )
 
-    foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
-        get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
-        list(APPEND cpprog_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
-    endforeach()
+        foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
+            get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
+            list(APPEND cpprog_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
+        endforeach()
 
-    set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CLANG_TIDY}")
+        set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CLANG_TIDY}")
+    endif()
 endfunction()
