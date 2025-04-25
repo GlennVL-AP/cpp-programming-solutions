@@ -4,6 +4,7 @@ cpprog_add_library(
     "ex_1_vector.cpp"
     "ex_2_matrix.cpp"
     "ex_3_animals.cpp"
+    "ex_4_circularbuffer.cpp"
 )
 
 cpprog_add_executable(TARGET labo_9_ex_1 CXX_SOURCES "ex_1_main.cpp" DEPENDENCIES labo_9_lib)

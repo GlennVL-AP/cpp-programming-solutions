@@ -39,6 +39,7 @@ cpprog_add_test(
     "labo9_vector.test.cpp"
     "labo9_matrix.test.cpp"
     "labo9_animals.test.cpp"
+    "labo9_circularbuffer.test.cpp"
     DEPENDENCIES
     labo_9_lib
 )

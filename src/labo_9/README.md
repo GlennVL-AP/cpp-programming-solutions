@@ -22,3 +22,29 @@
 
    fly(canary);
    ```
+
+4. **Extra oefening**: Implementeer de `CircularBuffer` klasse aan de hand van `Test Driven Development`. Volg de instructies in de [TDD Guided by ZOMBIES blog post](https://blog.wingman-sw.com/tdd-guided-by-zombies). Let er op dat er in de blog gebruik gemaakt wordt van de `C` programmeertaal om een dynamische circulaire buffer te implementeren met het `CppUTest` test framework. De stappen zijn hetzelfde, maar je zal ze moeten vertalen naar onze use case: een statische circulaire buffer in `C++`, met het `Catch2` test framework.
+
+   ```c++
+   template <typename T, int N>
+   requires (0 < N)
+   class CircularBuffer
+   {
+   public:
+       [[nodiscard]] bool is_empty() const;
+       [[nodiscard]] bool is_full() const;
+       [[nodiscard]] int size() const;
+
+       void clear();
+
+       void push_back(T const& value);
+       T pop_front();
+
+       [[nodiscard]] T operator[](int index) const;
+       [[nodiscard]] T& operator[](int index);
+
+   private:
+       std::array<T, N> data_{};
+       // extra members die nodig zijn: int front_, int back_, ...
+   };
+   ```
