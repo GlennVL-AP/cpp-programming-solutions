@@ -45,4 +45,4 @@ RUN chmod +x /tmp/install-cppcheck.sh \
     && rm -f /tmp/install-cppcheck.sh
 
 # add support for .gdbinit file in project root
-COPY --chown=${USERNAME}:${USERNAME} user.gdbinit /home/${USERNAME}/.gdbinit
+COPY --chown=vscode:vscode user.gdbinit /home/vscode/.gdbinit
