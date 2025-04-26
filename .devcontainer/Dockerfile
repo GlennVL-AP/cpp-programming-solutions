@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/base:debian
+
 USER root
 
 # install base packages
@@ -46,3 +47,5 @@ RUN chmod +x /tmp/install-cppcheck.sh \
 
 # add support for .gdbinit file in project root
 COPY --chown=vscode:vscode user.gdbinit /home/vscode/.gdbinit
+
+USER vscode
