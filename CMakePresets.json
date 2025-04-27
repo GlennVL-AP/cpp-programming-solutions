@@ -50,6 +50,7 @@
         },
         {
             "name": "gcc-debug",
+            "hidden": true,
             "inherits": "x64-linux-gcc",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
@@ -57,6 +58,7 @@
         },
         {
             "name": "gcc-release",
+            "hidden": true,
             "inherits": "x64-linux-gcc",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
@@ -74,10 +76,12 @@
         },
         {
             "name": "gcc-debug-build",
+            "hidden": true,
             "configurePreset": "gcc-debug"
         },
         {
             "name": "gcc-release-build",
+            "hidden": true,
             "configurePreset": "gcc-release"
         }
     ],
@@ -88,6 +92,7 @@
         },
         {
             "name": "gcc-debug-test",
+            "hidden": true,
             "configurePreset": "gcc-debug"
         }
     ]
