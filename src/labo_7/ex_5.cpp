@@ -12,8 +12,8 @@ std::vector<double> read_numbers()
 
 double calculate_average(std::vector<double> const& numbers)
 {
-    auto const sum = std::accumulate(std::begin(numbers), std::end(numbers), 0.0, [](double sum, double value) {
-        return sum + value;
+    auto const sum = std::accumulate(std::begin(numbers), std::end(numbers), 0.0, [](double total, double value) {
+        return total + value;
     });
 
     auto const count = std::distance(std::begin(numbers), std::end(numbers));

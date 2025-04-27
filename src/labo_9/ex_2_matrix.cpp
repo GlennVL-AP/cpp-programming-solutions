@@ -17,6 +17,10 @@ concept Arithmetic = requires(T first, T second) {
 template <typename T>
 concept NumberLike = std::default_initializable<T> && std::constructible_from<T, int> && std::swappable<T> && Arithmetic<T>;
 
+template <typename T, int N>
+requires (0 < N)
+using Array = std::array<T, static_cast<std::size_t>(N)>;
+
 export template <NumberLike T, int M, int N>
 requires (0 < M) && (0 < N)
 class Matrix
@@ -54,11 +58,11 @@ public:
         return data_[make_index(i_index, j_index)];
     }
 
-    [[nodiscard]] constexpr std::array<ValueType, N> row(int row_index) const
+    [[nodiscard]] constexpr Array<ValueType, N> row(int row_index) const
     {
         cpprog::expect([&]{ return (0 <= row_index) && (row_index < M); }, "0 <= row_index < M");
 
-        std::array<ValueType, N> result;
+        Array<ValueType, N> result;
 
         for (int i{0}; i < N; ++i)
         {
@@ -68,11 +72,11 @@ public:
         return result;
     }
 
-    [[nodiscard]] constexpr std::array<ValueType, M> column(int col_index) const
+    [[nodiscard]] constexpr Array<ValueType, M> column(int col_index) const
     {
         cpprog::expect([&]{ return (0 <= col_index) && (col_index < N); }, "0 <= col_index < N");
 
-        std::array<ValueType, M> result;
+        Array<ValueType, M> result;
 
         for (int i{0}; i < M; ++i)
         {
@@ -83,7 +87,7 @@ public:
     }
 
 private:
-    std::array<ValueType, static_cast<std::size_t>(M*N)> data_{};
+    Array<ValueType, M*N> data_{};
 
     static constexpr std::size_t make_index(int i_index, int j_index)
     {

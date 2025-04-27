@@ -37,7 +37,7 @@ public:
     }
 
 private:
-    std::array<T, N + 1> data_{};
+    std::array<T, static_cast<std::size_t>(N + 1)> data_{};
     int front_{};
     int back_{};
 
