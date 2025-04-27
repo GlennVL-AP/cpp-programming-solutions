@@ -1,0 +1,6 @@
+InlayHints:
+  BlockEnd: No
+  Designators: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+  DefaultArguments: No

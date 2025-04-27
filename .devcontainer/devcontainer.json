@@ -25,7 +25,8 @@
                     "--clang-tidy",
                     "--header-insertion=iwyu",
                     "--completion-style=detailed",
-                    "--compile-commands-dir=${workspaceFolder}/build/"
+                    "--compile-commands-dir=${workspaceFolder}/build/",
+                    "--enable-config"
                 ],
                 "cmake.debugConfig": {
                     "name": "Debug with LLDB",
