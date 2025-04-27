@@ -123,11 +123,14 @@ function(cpprog_add_test)
         message(WARNING "[cpprog] Prefer moving module files with reusable code to a separate library.")
     endif()
 
+    list(APPEND arg_DEPENDENCIES cpprog)
+
     add_executable(${arg_TARGET})
     target_sources(${arg_TARGET} PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_link_libraries(${arg_TARGET} PRIVATE Catch2::Catch2WithMain cpprog ${arg_DEPENDENCIES})
+    target_link_libraries(${arg_TARGET} PRIVATE Catch2::Catch2WithMain ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options(TARGET ${arg_TARGET})
     _cppprog_enable_sanitizers(TARGET ${arg_TARGET})
+    _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
     catch_discover_tests(${arg_TARGET} TEST_PREFIX "${arg_TARGET}." REPORTER compact)
 endfunction()
 
@@ -165,20 +168,18 @@ function(_cpprog_enable_clangtidy)
     set(multiValueArgs DEPENDENCIES)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
+    get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
 
-        set(cpprog_CLANG_TIDY
-            ${CLANG_TIDY}
-            --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
-            --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
-        )
+    set(cpprog_CLANG_TIDY
+        ${CLANG_TIDY}
+        --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
+        --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
+    )
 
-        foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
-            get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
-            list(APPEND cpprog_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
-        endforeach()
+    foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
+        get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
+        list(APPEND cpprog_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
+    endforeach()
 
-        set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CLANG_TIDY}")
-    endif()
+    set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CLANG_TIDY}")
 endfunction()
