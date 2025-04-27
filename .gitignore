@@ -1,5 +1,4 @@
 # Build directories and binary files
-.cache/
 build/
 out/
 cmake-build-*/

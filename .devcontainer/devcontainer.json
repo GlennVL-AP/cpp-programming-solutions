@@ -28,7 +28,7 @@
                     "--compile-commands-dir=${workspaceFolder}/build/"
                 ],
                 "cmake.debugConfig": {
-                    "name": "(lldb) Debug",
+                    "name": "Debug with LLDB",
                     "type": "lldb-dap",
                     "request": "launch",
                     "program": "${command:cmake.launchTargetPath}",
