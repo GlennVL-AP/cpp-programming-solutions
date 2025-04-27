@@ -8,7 +8,7 @@ Basic C++ devcontainer with cmake, compiler warnings, clang-tidy, and clang-form
 
 ### Installed tools
 
-* gdb
+* lldb
 * clang
 * cmake
 * clang-tidy

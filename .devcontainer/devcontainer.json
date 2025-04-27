@@ -3,38 +3,56 @@
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
-            "GCC_VERSION": "15.1.0",
             "CLANG_VERSION": "20",
-            "CMAKE_VERSION": "4.0.1",
-            "CPPCHECK_VERSION": "2.17.1"
+            "CMAKE_VERSION": "4.0.1"
         }
     },
+    "capAdd": [
+        "SYS_PTRACE"
+    ],
+    "securityOpt": [
+        "seccomp=unconfined"
+    ],
     "customizations": {
         "vscode": {
             "settings": {
-                "C_Cpp.intelliSenseEngine": "Tag Parser",
-                "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-                "C_Cpp.codeAnalysis.clangTidy.enabled": false,
-                "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
-                "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
-                "C_Cpp.codeAnalysis.runAutomatically": true,
-                "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+                "C_Cpp.intelliSenseEngine": "disabled",
+                "C_Cpp.default.configurationProvider": "llvm-vs-code-extensions.vscode-clangd",
+                "clangd.arguments": [
+                    "--log=verbose",
+                    "--pretty",
+                    "--background-index",
+                    "--clang-tidy",
+                    "--header-insertion=iwyu",
+                    "--completion-style=detailed",
+                    "--compile-commands-dir=${workspaceFolder}/build/"
+                ],
                 "cmake.debugConfig": {
-                    "setupCommands": [
-                        {
-                            "description": "Use .gdbinit file in project root",
-                            "text": "source ${workspaceFolder}/.gdbinit",
-                            "ignoreFailures": true
-                        }
-                    ]
+                    "name": "(lldb) Debug",
+                    "type": "lldb-dap",
+                    "request": "launch",
+                    "program": "${command:cmake.launchTargetPath}",
+                    "args": [],
+                    "cwd": "${workspaceFolder}",
+                    "stopOnEntry": false,
+                    "initCommands": [
+                        "command source ${workspaceFolder}/.lldbinit",
+                        "breakpoint set --name main"
+                    ],
+                    "env": {
+                        "LSAN_OPTIONS": "detect_leaks=0"
+                    }
                 },
                 "plantuml.server": "https://www.plantuml.com/plantuml"
             },
             "extensions": [
-                "ms-vscode.cpptools-extension-pack",
-                "jebbs.plantuml",
+                "ms-vscode.cmake-tools",
+                "llvm-vs-code-extensions.lldb-dap",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "OlegTolmatcev.gdb-dap",
+                "cheshirekow.cmake-format",
                 "DavidAnson.vscode-markdownlint",
-                "cheshirekow.cmake-format"
+                "jebbs.plantuml"
             ]
         }
     },

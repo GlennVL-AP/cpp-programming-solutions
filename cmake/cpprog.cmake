@@ -6,11 +6,29 @@ macro(cpprog_init)
     _cpprog_set_cxx_standard()
     _cpprog_enable_lto()
     _cpprog_find_clang_tidy()
-    _cpprog_generate_gdbinit()
+    _cpprog_generate_debuginit()
 endmacro()
 
 macro(_cpprog_generate_compile_commands)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+    file(RELATIVE_PATH cpprog_RELATIVE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build ${CMAKE_CURRENT_BINARY_DIR})
+
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+                ${cpprog_RELATIVE_BINARY_DIR}/compile_commands.json
+                compile_commands.json
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build
+        RESULT_VARIABLE cpprog_SYMLINK_RESULT
+        OUTPUT_QUIET
+        ERROR_QUIET
+    )
+
+    if(NOT cpprog_SYMLINK_RESULT EQUAL 0)
+        message(WARNING "[cpprog] Failed to create symlink for ${cpprog_RELATIVE_BINARY_DIR}/compile_commands.json!")
+    else()
+        message(STATUS "[cpprog] Created symlink for ${cpprog_RELATIVE_BINARY_DIR}/compile_commands.json.")
+    endif()
 endmacro()
 
 macro(_cpprog_enable_modules)
@@ -26,15 +44,14 @@ endmacro()
 
 macro(_cpprog_enable_lto)
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO ON)
 endmacro()
 
 macro(_cpprog_find_clang_tidy)
     find_program(CLANG_TIDY NAMES clang-tidy REQUIRED)
 endmacro()
 
-macro(_cpprog_generate_gdbinit)
-    configure_file(${CMAKE_SOURCE_DIR}/gdbinit.in ${CMAKE_SOURCE_DIR}/.gdbinit)
+macro(_cpprog_generate_debuginit)
+    configure_file(${CMAKE_SOURCE_DIR}/lldbinit.in ${CMAKE_SOURCE_DIR}/.lldbinit)
 endmacro()
 
 function(cpprog_add_executable)
@@ -44,15 +61,15 @@ function(cpprog_add_executable)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
-        message(FATAL_ERROR "Missing argument TARGET. Executable name is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument TARGET. Executable name is required!")
     endif()
     if(NOT arg_CXX_SOURCES)
-        message(FATAL_ERROR "Missing argument CXX_SOURCES. At least a source file with main function is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument CXX_SOURCES. At least a source file with main function is required!")
     endif()
 
     list(LENGTH arg_CXX_SOURCES cpprog_NUM_SOURCES)
     if(cpprog_NUM_SOURCES GREATER 1)
-        message(WARNING "There should only be one source file with main function. Other sources should be modules.")
+        message(WARNING "[cpprog] There should only be one source file with main function. Other sources should be modules.")
     endif()
 
     list(APPEND arg_DEPENDENCIES cpprog)
@@ -72,10 +89,10 @@ function(cpprog_add_library)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
-        message(FATAL_ERROR "Missing argument TARGET. Library name is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument TARGET. Library name is required!")
     endif()
     if (NOT arg_CXX_MODULES)
-        message(FATAL_ERROR "Missing argument CXX_MODULES. At least one module is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument CXX_MODULES. At least one module is required!")
     endif()
 
     if(NOT "${arg_TARGET}" STREQUAL "cpprog")
@@ -97,13 +114,13 @@ function(cpprog_add_test)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
-        message(FATAL_ERROR "Missing argument TARGET. Test name is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument TARGET. Test name is required!")
     endif()
     if(NOT arg_CXX_SOURCES)
-        message(FATAL_ERROR "Missing argument CXX_SOURCES. At least one source file is required!")
+        message(FATAL_ERROR "[cpprog] Missing argument CXX_SOURCES. At least one source file is required!")
     endif()
     if(arg_CXX_MODULES)
-        message(WARNING "Prefer moving module files with reusable code to a separate library.")
+        message(WARNING "[cpprog] Prefer moving module files with reusable code to a separate library.")
     endif()
 
     add_executable(${arg_TARGET})

@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Tests with LLDB",
+            "type": "lldb-dap",
+            "request": "launch",
+            "presentation": {
+                "hidden": true
+            },
+            "program": "${cmake.testProgram}",
+            "args": [
+                "${cmake.testArgs}"
+            ],
+            "cwd": "${cmake.testWorkingDirectory}",
+            "stopOnEntry": true,
+            "initCommands": [
+                "command source ${workspaceFolder}/.lldbinit"
+            ],
+            "env": {
+                "LSAN_OPTIONS": "detect_leaks=0"
+            }
+        }
+    ]
+}

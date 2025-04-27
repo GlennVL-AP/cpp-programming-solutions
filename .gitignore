@@ -1,4 +1,5 @@
 # Build directories and binary files
+.cache/
 build/
 out/
 cmake-build-*/
@@ -35,4 +36,4 @@ ehthumbs.db
 Thumbs.db
 
 # Generated files
-.gdbinit
+.lldbinit
