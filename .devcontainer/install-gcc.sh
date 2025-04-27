@@ -9,6 +9,17 @@ if [ "${GCC_VERSION}" = "none" ]; then
     exit 0
 fi
 
+cleanup() {
+    EXIT_CODE=$?
+    set +e
+    if [[ -n "${TMP_DIR}" ]]; then
+        echo "Executing cleanup of tmp files"
+        rm -Rf "${TMP_DIR}"
+    fi
+    exit $EXIT_CODE
+}
+trap cleanup EXIT
+
 apt_get_update_if_needed() {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."

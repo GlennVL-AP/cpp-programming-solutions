@@ -9,6 +9,17 @@ if [ "${CPPCHECK_VERSION}" = "none" ]; then
     exit 0
 fi
 
+cleanup() {
+    EXIT_CODE=$?
+    set +e
+    if [[ -n "${TMP_DIR}" ]]; then
+        echo "Executing cleanup of tmp files"
+        rm -Rf "${TMP_DIR}"
+    fi
+    exit $EXIT_CODE
+}
+trap cleanup EXIT
+
 echo "Installing CppCheck..."
 
 TMP_DIR=$(mktemp -d -t cppcheck-XXXXXXXXXX)
