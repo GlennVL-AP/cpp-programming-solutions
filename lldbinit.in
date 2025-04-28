@@ -1,1 +1,2 @@
 settings set target.source-map /project_root ${CMAKE_SOURCE_DIR}
+settings set target.process.thread.step-avoid-regexp ^std::|^Catch::
