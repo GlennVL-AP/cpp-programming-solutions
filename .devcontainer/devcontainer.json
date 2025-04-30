@@ -23,7 +23,7 @@
                     "--pretty",
                     "--background-index",
                     "--clang-tidy",
-                    "--header-insertion=iwyu",
+                    "--header-insertion=never",
                     "--completion-style=detailed",
                     "--compile-commands-dir=${workspaceFolder}/build/",
                     "--enable-config"
