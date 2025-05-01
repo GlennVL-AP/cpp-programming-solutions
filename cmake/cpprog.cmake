@@ -53,9 +53,10 @@ macro(_cpprog_find_clang_tidy)
     find_program(CLANG_TIDY NAMES clang-tidy REQUIRED)
 endmacro()
 
-function(_cpprog_generate_debuginit)
+macro(_cpprog_generate_debuginit)
+    configure_file("${CMAKE_SOURCE_DIR}/gdbinit.in" "${CMAKE_SOURCE_DIR}/.gdbinit")
     configure_file("${CMAKE_SOURCE_DIR}/lldbinit.in" "${CMAKE_SOURCE_DIR}/.lldbinit")
-endfunction()
+endmacro()
 
 function(cpprog_add_executable)
     set(options)
