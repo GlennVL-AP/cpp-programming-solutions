@@ -26,15 +26,6 @@
             }
         },
         {
-            "name": "x64-linux-gcc",
-            "hidden": true,
-            "inherits": "vcpkg",
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-linux-gcc-libstdcxx",
-                "VCPKG_CHAINLOAD_TOOLCHAIN_FILE": "${sourceDir}/cmake/x64-linux-gcc-libstdcxx.toolchain.cmake"
-            }
-        },
-        {
             "name": "clang-debug",
             "inherits": "x64-linux-clang",
             "cacheVariables": {
@@ -44,22 +35,6 @@
         {
             "name": "clang-release",
             "inherits": "x64-linux-clang",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "gcc-debug",
-            "hidden": true,
-            "inherits": "x64-linux-gcc",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "gcc-release",
-            "hidden": true,
-            "inherits": "x64-linux-gcc",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -73,27 +48,12 @@
         {
             "name": "clang-release-build",
             "configurePreset": "clang-release"
-        },
-        {
-            "name": "gcc-debug-build",
-            "hidden": true,
-            "configurePreset": "gcc-debug"
-        },
-        {
-            "name": "gcc-release-build",
-            "hidden": true,
-            "configurePreset": "gcc-release"
         }
     ],
     "testPresets": [
         {
             "name": "clang-debug-test",
             "configurePreset": "clang-debug"
-        },
-        {
-            "name": "gcc-debug-test",
-            "hidden": true,
-            "configurePreset": "gcc-debug"
         }
     ]
 }
