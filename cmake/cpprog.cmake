@@ -51,7 +51,6 @@ macro(_cpprog_find_clang_tidy)
 endmacro()
 
 macro(_cpprog_generate_debuginit)
-    configure_file(${CMAKE_SOURCE_DIR}/gdbinit.in ${CMAKE_SOURCE_DIR}/.gdbinit)
     configure_file(${CMAKE_SOURCE_DIR}/lldbinit.in ${CMAKE_SOURCE_DIR}/.lldbinit)
 endmacro()
 

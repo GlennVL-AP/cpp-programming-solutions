@@ -1,4 +1,0 @@
-set env LSAN_OPTIONS=detect_leaks=0
-set substitute-path /project_root ${CMAKE_SOURCE_DIR}
-skip -rfu std::.*
-skip -rfu Catch::.*

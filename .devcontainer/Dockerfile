@@ -26,8 +26,7 @@ RUN chmod +x /tmp/install-*.sh \
  && ./tmp/install-cppcheck.sh ${CPPCHECK_VERSION} \
  && rm -f /tmp/install-*.sh
 
-# add support for .gdbinit and .lldbinit files in project root
-COPY --chown=vscode:vscode user.gdbinit /home/vscode/.gdbinit
+# add support for .lldbinit files in project root
 COPY --chown=vscode:vscode user.lldbinit /home/vscode/.lldbinit
 
 USER vscode
