@@ -2,8 +2,8 @@ include_guard()
 
 macro(cpprog_init)
     _cpprog_generate_compile_commands()
-    _cpprog_enable_modules()
-    _cpprog_set_cxx_standard()
+    _cpprog_enable_cxx_modules()
+    _cpprog_set_language_standards()
     _cpprog_enable_lto()
     _cpprog_find_clang_tidy()
     _cpprog_generate_debuginit()
@@ -31,12 +31,15 @@ macro(_cpprog_generate_compile_commands)
     endif()
 endmacro()
 
-macro(_cpprog_enable_modules)
+macro(_cpprog_enable_cxx_modules)
     set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "a9e1cf81-9932-4810-974b-6eccaf14e457")
     set(CMAKE_CXX_MODULE_STD ON)
 endmacro()
 
-macro(_cpprog_set_cxx_standard)
+macro(_cpprog_set_language_standards)
+    set(CMAKE_C_STANDARD 23)
+    set(CMAKE_C_STANDARD_REQUIRED ON)
+    set(CMAKE_C_EXTENSIONS OFF)
     set(CMAKE_CXX_STANDARD 26)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
@@ -50,9 +53,9 @@ macro(_cpprog_find_clang_tidy)
     find_program(CLANG_TIDY NAMES clang-tidy REQUIRED)
 endmacro()
 
-macro(_cpprog_generate_debuginit)
+function(_cpprog_generate_debuginit)
     configure_file(${CMAKE_SOURCE_DIR}/lldbinit.in ${CMAKE_SOURCE_DIR}/.lldbinit)
-endmacro()
+endfunction()
 
 function(cpprog_add_executable)
     set(options)
@@ -69,7 +72,7 @@ function(cpprog_add_executable)
 
     list(LENGTH arg_CXX_SOURCES cpprog_NUM_SOURCES)
     if(cpprog_NUM_SOURCES GREATER 1)
-        message(WARNING "[cpprog] There should only be one source file with main function. Other sources should be modules.")
+        message(NOTICE "[cpprog] Prefer modules when writing C++ code.")
     endif()
 
     list(APPEND arg_DEPENDENCIES cpprog)
@@ -85,14 +88,14 @@ endfunction()
 function(cpprog_add_library)
     set(options)
     set(oneValueArgs TARGET)
-    set(multiValueArgs CXX_MODULES DEPENDENCIES)
+    set(multiValueArgs CXX_MODULES CXX_SOURCES INCLUDE_DIRECTORIES DEPENDENCIES)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
         message(FATAL_ERROR "[cpprog] Missing argument TARGET. Library name is required!")
     endif()
-    if (NOT arg_CXX_MODULES)
-        message(FATAL_ERROR "[cpprog] Missing argument CXX_MODULES. At least one module is required!")
+    if ((NOT arg_CXX_MODULES) OR arg_CXX_SOURCES)
+        message(NOTICE "[cpprog] Prefer modules when writing C++ code.")
     endif()
 
     if(NOT "${arg_TARGET}" STREQUAL "cpprog")
@@ -100,7 +103,8 @@ function(cpprog_add_library)
     endif()
 
     add_library(${arg_TARGET})
-    target_sources(${arg_TARGET} PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES})
+    target_sources(${arg_TARGET} PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
+    target_include_directories(${arg_TARGET} PUBLIC ${arg_INCLUDE_DIRECTORIES})
     target_link_libraries(${arg_TARGET} PRIVATE ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options(TARGET ${arg_TARGET})
     _cpprog_enable_sanitizers(TARGET ${arg_TARGET})
@@ -120,7 +124,7 @@ function(cpprog_add_test)
         message(FATAL_ERROR "[cpprog] Missing argument CXX_SOURCES. At least one source file is required!")
     endif()
     if(arg_CXX_MODULES)
-        message(WARNING "[cpprog] Prefer moving module files with reusable code to a separate library.")
+        message(NOTICE "[cpprog] Prefer moving module files with reusable code to a separate library.")
     endif()
 
     list(APPEND arg_DEPENDENCIES cpprog)
@@ -140,11 +144,18 @@ function(_cpprog_set_compiler_options)
     set(multiValueArgs)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
+    set(cpprog_COMMON_WARNINGS
+        "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wdouble-promotion;"
+        "-Wcast-align;-Wunused;-Wnull-dereference;-Wimplicit-fallthrough;-Wformat=2;-Werror")
+
+    set(cpprog_C_WARNINGS "${cpprog_COMMON_WARNINGS}")
+    set(cpprog_CXX_WARNINGS "${cpprog_COMMON_WARNINGS};"
+        "-Wnon-virtual-dtor;-Wold-style-cast;-Woverloaded-virtual;-Wextra-semi")
+
     target_compile_options(${arg_TARGET} PRIVATE
         "-ffile-prefix-map=${CMAKE_SOURCE_DIR}=/project_root"
-        "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wdouble-promotion;-Wextra-semi;-Wnon-virtual-dtor"
-        "-Wold-style-cast;-Wcast-align;-Wunused;-Woverloaded-virtual;-Wnull-dereference;-Wimplicit-fallthrough;-Wformat=2"
-        "-Werror"
+        "$<$<COMPILE_LANGUAGE:C>:${cpprog_C_WARNINGS}>"
+        "$<$<COMPILE_LANGUAGE:CXX>:${cpprog_CXX_WARNINGS}>"
     )
 endfunction()
 
@@ -154,11 +165,13 @@ function(_cpprog_enable_sanitizers)
     set(multiValueArgs)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
+    set(cpprog_SANITIZERS "address,undefined")
+
     target_compile_options(${arg_TARGET} PRIVATE
-        "$<$<CONFIG:Debug>:-fsanitize=address,undefined;-fno-omit-frame-pointer>"
+        "$<$<CONFIG:Debug>:-fsanitize=${cpprog_SANITIZERS};-fno-omit-frame-pointer>"
     )
     target_link_options(${arg_TARGET} PRIVATE
-        "$<$<CONFIG:Debug>:-fsanitize=address,undefined>"
+        "$<$<CONFIG:Debug>:-fsanitize=${cpprog_SANITIZERS}>"
     )
 endfunction()
 
@@ -170,7 +183,8 @@ function(_cpprog_enable_clangtidy)
 
     get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
 
-    set(cpprog_CLANG_TIDY
+    set(cpprog_C_CLANG_TIDY ${CLANG_TIDY})
+    set(cpprog_CXX_CLANG_TIDY
         ${CLANG_TIDY}
         --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
         --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
@@ -178,8 +192,9 @@ function(_cpprog_enable_clangtidy)
 
     foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
         get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
-        list(APPEND cpprog_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
+        list(APPEND cpprog_CXX_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
     endforeach()
 
-    set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CLANG_TIDY}")
+    set_target_properties(${arg_TARGET} PROPERTIES C_CLANG_TIDY "${cpprog_C_CLANG_TIDY}")
+    set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CXX_CLANG_TIDY}")
 endfunction()
