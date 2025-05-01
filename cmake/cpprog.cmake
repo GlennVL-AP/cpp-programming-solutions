@@ -12,13 +12,13 @@ endmacro()
 macro(_cpprog_generate_compile_commands)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    file(RELATIVE_PATH cpprog_RELATIVE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build ${CMAKE_CURRENT_BINARY_DIR})
+    file(RELATIVE_PATH cpprog_RELATIVE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build" "${CMAKE_CURRENT_BINARY_DIR}")
 
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-                ${cpprog_RELATIVE_BINARY_DIR}/compile_commands.json
-                compile_commands.json
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build
+        COMMAND "${CMAKE_COMMAND}" -E create_symlink
+                "${cpprog_RELATIVE_BINARY_DIR}/compile_commands.json"
+                "compile_commands.json"
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build"
         RESULT_VARIABLE cpprog_SYMLINK_RESULT
         OUTPUT_QUIET
         ERROR_QUIET
@@ -54,7 +54,7 @@ macro(_cpprog_find_clang_tidy)
 endmacro()
 
 function(_cpprog_generate_debuginit)
-    configure_file(${CMAKE_SOURCE_DIR}/lldbinit.in ${CMAKE_SOURCE_DIR}/.lldbinit)
+    configure_file("${CMAKE_SOURCE_DIR}/lldbinit.in" "${CMAKE_SOURCE_DIR}/.lldbinit")
 endfunction()
 
 function(cpprog_add_executable)
@@ -77,12 +77,12 @@ function(cpprog_add_executable)
 
     list(APPEND arg_DEPENDENCIES cpprog)
 
-    add_executable(${arg_TARGET})
-    target_sources(${arg_TARGET} PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_link_libraries(${arg_TARGET} PRIVATE ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options(TARGET ${arg_TARGET})
-    _cpprog_enable_sanitizers(TARGET ${arg_TARGET})
-    _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
+    add_executable("${arg_TARGET}")
+    target_sources("${arg_TARGET}" PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
+    target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
+    _cpprog_set_compiler_options("${arg_TARGET}")
+    _cpprog_enable_sanitizers("${arg_TARGET}")
+    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
 endfunction()
 
 function(cpprog_add_library)
@@ -102,13 +102,13 @@ function(cpprog_add_library)
         list(APPEND arg_DEPENDENCIES cpprog)
     endif()
 
-    add_library(${arg_TARGET})
-    target_sources(${arg_TARGET} PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_include_directories(${arg_TARGET} PUBLIC ${arg_INCLUDE_DIRECTORIES})
-    target_link_libraries(${arg_TARGET} PRIVATE ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options(TARGET ${arg_TARGET})
-    _cpprog_enable_sanitizers(TARGET ${arg_TARGET})
-    _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
+    add_library("${arg_TARGET}")
+    target_sources("${arg_TARGET}" PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
+    target_include_directories("${arg_TARGET}" PUBLIC ${arg_INCLUDE_DIRECTORIES})
+    target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
+    _cpprog_set_compiler_options("${arg_TARGET}")
+    _cpprog_enable_sanitizers("${arg_TARGET}")
+    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
 endfunction()
 
 function(cpprog_add_test)
@@ -129,21 +129,16 @@ function(cpprog_add_test)
 
     list(APPEND arg_DEPENDENCIES cpprog)
 
-    add_executable(${arg_TARGET})
-    target_sources(${arg_TARGET} PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_link_libraries(${arg_TARGET} PRIVATE Catch2::Catch2WithMain ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options(TARGET ${arg_TARGET})
-    _cpprog_enable_sanitizers(TARGET ${arg_TARGET})
-    _cpprog_enable_clangtidy(TARGET ${arg_TARGET} DEPENDENCIES ${arg_DEPENDENCIES})
-    catch_discover_tests(${arg_TARGET} TEST_PREFIX "${arg_TARGET}." REPORTER compact)
+    add_executable("${arg_TARGET}")
+    target_sources("${arg_TARGET}" PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
+    target_link_libraries("${arg_TARGET}" PRIVATE Catch2::Catch2WithMain ${arg_DEPENDENCIES})
+    _cpprog_set_compiler_options("${arg_TARGET}")
+    _cpprog_enable_sanitizers("${arg_TARGET}")
+    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
+    catch_discover_tests("${arg_TARGET}" TEST_PREFIX "${arg_TARGET}." REPORTER compact)
 endfunction()
 
-function(_cpprog_set_compiler_options)
-    set(options)
-    set(oneValueArgs TARGET)
-    set(multiValueArgs)
-    cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
-
+function(_cpprog_set_compiler_options target_name)
     set(cpprog_COMMON_WARNINGS
         "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wdouble-promotion;"
         "-Wcast-align;-Wunused;-Wnull-dereference;-Wimplicit-fallthrough;-Wformat=2;-Werror")
@@ -152,49 +147,39 @@ function(_cpprog_set_compiler_options)
     set(cpprog_CXX_WARNINGS "${cpprog_COMMON_WARNINGS};"
         "-Wnon-virtual-dtor;-Wold-style-cast;-Woverloaded-virtual;-Wextra-semi")
 
-    target_compile_options(${arg_TARGET} PRIVATE
+    target_compile_options("${target_name}" PRIVATE
         "-ffile-prefix-map=${CMAKE_SOURCE_DIR}=/project_root"
         "$<$<COMPILE_LANGUAGE:C>:${cpprog_C_WARNINGS}>"
         "$<$<COMPILE_LANGUAGE:CXX>:${cpprog_CXX_WARNINGS}>"
     )
 endfunction()
 
-function(_cpprog_enable_sanitizers)
-    set(options)
-    set(oneValueArgs TARGET)
-    set(multiValueArgs)
-    cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
-
+function(_cpprog_enable_sanitizers target_name)
     set(cpprog_SANITIZERS "address,undefined")
 
-    target_compile_options(${arg_TARGET} PRIVATE
+    target_compile_options("${target_name}" PRIVATE
         "$<$<CONFIG:Debug>:-fsanitize=${cpprog_SANITIZERS};-fno-omit-frame-pointer>"
     )
-    target_link_options(${arg_TARGET} PRIVATE
+    target_link_options("${target_name}" PRIVATE
         "$<$<CONFIG:Debug>:-fsanitize=${cpprog_SANITIZERS}>"
     )
 endfunction()
 
-function(_cpprog_enable_clangtidy)
-    set(options)
-    set(oneValueArgs TARGET)
-    set(multiValueArgs DEPENDENCIES)
-    cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
+function(_cpprog_enable_clangtidy target_name dependencies)
+    get_target_property(cpprog_CXX_STANDARD "${target_name}" CXX_STANDARD)
 
-    get_target_property(cpprog_CXX_STANDARD ${arg_TARGET} CXX_STANDARD)
-
-    set(cpprog_C_CLANG_TIDY ${CLANG_TIDY})
+    set(cpprog_C_CLANG_TIDY "${CLANG_TIDY}")
     set(cpprog_CXX_CLANG_TIDY
-        ${CLANG_TIDY}
-        --extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir
-        --extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${arg_TARGET}.dir
+        "${CLANG_TIDY}"
+        "--extra-arg=-fprebuilt-module-path=${CMAKE_BINARY_DIR}/CMakeFiles/__cmake_cxx${cpprog_CXX_STANDARD}.dir"
+        "--extra-arg=-fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${target_name}.dir"
     )
 
-    foreach(cpprog_DEP IN LISTS arg_DEPENDENCIES)
-        get_target_property(cpprog_DEP_DIR ${cpprog_DEP} BINARY_DIR)
-        list(APPEND cpprog_CXX_CLANG_TIDY --extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir)
+    foreach(cpprog_DEP IN LISTS dependencies)
+        get_target_property(cpprog_DEP_DIR "${cpprog_DEP}" BINARY_DIR)
+        list(APPEND cpprog_CXX_CLANG_TIDY "--extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir")
     endforeach()
 
-    set_target_properties(${arg_TARGET} PROPERTIES C_CLANG_TIDY "${cpprog_C_CLANG_TIDY}")
-    set_target_properties(${arg_TARGET} PROPERTIES CXX_CLANG_TIDY "${cpprog_CXX_CLANG_TIDY}")
+    set_target_properties("${target_name}" PROPERTIES C_CLANG_TIDY "${cpprog_C_CLANG_TIDY}")
+    set_target_properties("${target_name}" PROPERTIES CXX_CLANG_TIDY "${cpprog_CXX_CLANG_TIDY}")
 endfunction()
