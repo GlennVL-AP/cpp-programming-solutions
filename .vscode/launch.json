@@ -16,10 +16,7 @@
             "stopOnEntry": true,
             "initCommands": [
                 "command source ${workspaceFolder}/.lldbinit"
-            ],
-            "env": {
-                "LSAN_OPTIONS": "detect_leaks=0"
-            }
+            ]
         }
     ]
 }
