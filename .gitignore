@@ -35,4 +35,5 @@ ehthumbs.db
 Thumbs.db
 
 # Generated files
+.gdbinit
 .lldbinit
