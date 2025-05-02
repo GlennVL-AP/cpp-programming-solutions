@@ -104,7 +104,7 @@ function(cpprog_add_library)
 
     add_library("${arg_TARGET}")
     target_sources("${arg_TARGET}" PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_include_directories("${arg_TARGET}" PUBLIC ${arg_INCLUDE_DIRECTORIES})
+    target_include_directories("${arg_TARGET}" INTERFACE ${arg_INCLUDE_DIRECTORIES})
     target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options("${arg_TARGET}")
     _cpprog_enable_sanitizers("${arg_TARGET}")
