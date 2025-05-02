@@ -1,6 +1,19 @@
 #include <catch.hpp>
 
 import cpprog;
+import std;
+
+TEST_CASE("test cpprog::version", "[cpprog][version]")
+{
+    SECTION("get version")
+    {
+        auto const expected = cpprog::version::as_string();
+        auto const actual =
+            std::format("{}.{}.{}", cpprog::version::major(), cpprog::version::minor(), cpprog::version::patch());
+
+        REQUIRE(actual == expected);
+    }
+}
 
 TEST_CASE("test cpprog::expect", "[cpprog][expect]")
 {
