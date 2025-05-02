@@ -43,3 +43,11 @@ cpprog_add_test(
     DEPENDENCIES
     labo_9_lib
 )
+
+cpprog_add_test(
+    TARGET test_labo10
+    CXX_SOURCES
+    "labo10_dynarray.test.cpp"
+    DEPENDENCIES
+    labo_10_lib
+)
