@@ -112,8 +112,10 @@ function(cpprog_add_test)
         message(NOTICE "[cpprog] Prefer moving module files with reusable code to a separate library.")
     endif()
 
+    list(APPEND arg_DEPENDENCIES Catch2::Catch2WithMain)
+
     add_executable("${arg_TARGET}")
-    _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "" "Catch2::Catch2WithMain;${arg_DEPENDENCIES}")
+    _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "" "${arg_DEPENDENCIES}")
     catch_discover_tests("${arg_TARGET}" TEST_PREFIX "${arg_TARGET}." REPORTER compact)
 endfunction()
 
@@ -123,8 +125,8 @@ function(_cpprog_configure_target target_name modules sources headers dependenci
     endif()
 
     target_sources("${target_name}"
-        PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} FILES ${headers}
-        PUBLIC FILE_SET CXX_MODULES FILES ${modules}
+        PUBLIC FILE_SET HEADERS BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${headers}
+        PUBLIC FILE_SET CXX_MODULES BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" FILES ${modules}
         PRIVATE ${sources}
     )
 
