@@ -19,6 +19,7 @@ public:
         std::copy_n(other.begin(), other.size(), begin());
     }
 
+    // the default generated move constructor does not set capacity_ to zero in other, so we have to implement it ourselves
     DynamicArray(DynamicArray&& other) noexcept { swap(*this, other); }
 
     // the special member function nolint is required because clang-tidy does not recognize this covers both copy and move
