@@ -1,29 +1,16 @@
-set(cpprog_VERSION "${${CMAKE_PROJECT_NAME}_VERSION}")
-set(cpprog_VERSION_MAJOR "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}")
-set(cpprog_VERSION_MINOR "${${CMAKE_PROJECT_NAME}_VERSION_MINOR}")
-set(cpprog_VERSION_PATCH "${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
-
-if(NOT cpprog_VERSION_MAJOR)
-    set(cpprog_VERSION_MAJOR 0)
-endif()
-if(NOT cpprog_VERSION_MINOR)
-    set(cpprog_VERSION_MINOR 0)
-endif()
-if(NOT cpprog_VERSION_PATCH)
-    set(cpprog_VERSION_PATCH 0)
-endif()
-
-# TODO this only updates the commit hash when the project is reconfigured
-set(cpprog_GIT_COMMIT_HASH "")
-execute_process(
-    COMMAND git rev-parse HEAD
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    OUTPUT_VARIABLE cpprog_GIT_COMMIT_HASH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_QUIET
+add_custom_target(
+    generate_cpprog_version ALL
+    COMMAND "${CMAKE_COMMAND}"
+        -DPROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+        -DINPUT_FILE="${CMAKE_CURRENT_LIST_DIR}/cpprog_version.cpp.in"
+        -DOUTPUT_FILE="${CMAKE_CURRENT_BINARY_DIR}/cpprog_version.cpp"
+        -DVERSION_MAJOR="${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}"
+        -DVERSION_MINOR="${${CMAKE_PROJECT_NAME}_VERSION_MINOR}"
+        -DVERSION_PATCH="${${CMAKE_PROJECT_NAME}_VERSION_PATCH}"
+        -P "${CMAKE_CURRENT_LIST_DIR}/generate_version_info.cmake"
+    BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/cpprog_version.cpp"
+    COMMENT "[cpprog] Generating version info."
 )
-
-configure_file("${CMAKE_CURRENT_LIST_DIR}/cpprog_version.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/cpprog_version.cpp")
 
 cpprog_add_library(
     TARGET cpprog
@@ -32,3 +19,5 @@ cpprog_add_library(
     "cpprog_utils.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/cpprog_version.cpp"
 )
+
+add_dependencies(cpprog generate_cpprog_version)

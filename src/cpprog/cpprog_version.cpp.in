@@ -6,27 +6,27 @@ namespace cpprog::version {
 
 export [[nodiscard]] constexpr std::string_view as_string()
 {
-    return "${cpprog_VERSION}";
+    return "@VERSION@";
 }
 
 export [[nodiscard]] constexpr int major()
 {
-    return ${cpprog_VERSION_MAJOR};
+    return @VERSION_MAJOR@;
 }
 
 export [[nodiscard]] constexpr int minor()
 {
-    return ${cpprog_VERSION_MINOR};
+    return @VERSION_MINOR@;
 }
 
 export [[nodiscard]] constexpr int patch()
 {
-    return ${cpprog_VERSION_PATCH};
+    return @VERSION_PATCH@;
 }
 
 export [[nodiscard]] constexpr std::string_view git_commit_hash()
 {
-    return "${cpprog_GIT_COMMIT_HASH}";
+    return "@GIT_COMMIT_HASH@";
 }
 
 } // namespace cpprog::version
