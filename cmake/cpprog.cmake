@@ -75,14 +75,8 @@ function(cpprog_add_executable)
         message(NOTICE "[cpprog] Prefer modules when writing C++ code.")
     endif()
 
-    list(APPEND arg_DEPENDENCIES cpprog)
-
     add_executable("${arg_TARGET}")
-    target_sources("${arg_TARGET}" PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options("${arg_TARGET}")
-    _cpprog_enable_sanitizers("${arg_TARGET}")
-    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
+    _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "" "${arg_DEPENDENCIES}")
 endfunction()
 
 function(cpprog_add_library)
@@ -98,20 +92,8 @@ function(cpprog_add_library)
         message(NOTICE "[cpprog] Prefer modules when writing C++ code.")
     endif()
 
-    if(NOT "${arg_TARGET}" STREQUAL "cpprog")
-        list(APPEND arg_DEPENDENCIES cpprog)
-    endif()
-
     add_library("${arg_TARGET}")
-    target_sources("${arg_TARGET}"
-        PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} FILES ${arg_CXX_HEADERS}
-        PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES}
-        PRIVATE ${arg_CXX_SOURCES}
-    )
-    target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options("${arg_TARGET}")
-    _cpprog_enable_sanitizers("${arg_TARGET}")
-    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
+    _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "${arg_CXX_HEADERS}" "${arg_DEPENDENCIES}")
 endfunction()
 
 function(cpprog_add_test)
@@ -130,15 +112,27 @@ function(cpprog_add_test)
         message(NOTICE "[cpprog] Prefer moving module files with reusable code to a separate library.")
     endif()
 
-    list(APPEND arg_DEPENDENCIES cpprog)
-
     add_executable("${arg_TARGET}")
-    target_sources("${arg_TARGET}" PRIVATE FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_link_libraries("${arg_TARGET}" PRIVATE Catch2::Catch2WithMain ${arg_DEPENDENCIES})
-    _cpprog_set_compiler_options("${arg_TARGET}")
-    _cpprog_enable_sanitizers("${arg_TARGET}")
-    _cpprog_enable_clangtidy("${arg_TARGET}" "${arg_DEPENDENCIES}")
+    _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "" "Catch2::Catch2WithMain;${arg_DEPENDENCIES}")
     catch_discover_tests("${arg_TARGET}" TEST_PREFIX "${arg_TARGET}." REPORTER compact)
+endfunction()
+
+function(_cpprog_configure_target target_name modules sources headers dependencies)
+    if(NOT "${target_name}" STREQUAL "cpprog")
+        list(APPEND dependencies cpprog)
+    endif()
+
+    target_sources("${target_name}"
+        PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} FILES ${headers}
+        PUBLIC FILE_SET CXX_MODULES FILES ${modules}
+        PRIVATE ${sources}
+    )
+
+    target_link_libraries("${target_name}" PRIVATE ${dependencies})
+
+    _cpprog_set_compiler_options("${target_name}")
+    _cpprog_enable_sanitizers("${target_name}")
+    _cpprog_enable_clangtidy("${target_name}" "${dependencies}")
 endfunction()
 
 function(_cpprog_set_compiler_options target_name)
@@ -179,8 +173,10 @@ function(_cpprog_enable_clangtidy target_name dependencies)
     )
 
     foreach(cpprog_DEP IN LISTS dependencies)
-        get_target_property(cpprog_DEP_DIR "${cpprog_DEP}" BINARY_DIR)
-        list(APPEND cpprog_CXX_CLANG_TIDY "--extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir")
+        if(TARGET "${cpprog_DEP}")
+            get_target_property(cpprog_DEP_DIR "${cpprog_DEP}" BINARY_DIR)
+            list(APPEND cpprog_CXX_CLANG_TIDY "--extra-arg=-fprebuilt-module-path=${cpprog_DEP_DIR}/CMakeFiles/${cpprog_DEP}.dir")
+        endif()
     endforeach()
 
     set_target_properties("${target_name}" PROPERTIES C_CLANG_TIDY "${cpprog_C_CLANG_TIDY}")
