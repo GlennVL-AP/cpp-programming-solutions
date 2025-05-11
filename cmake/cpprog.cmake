@@ -88,7 +88,7 @@ endfunction()
 function(cpprog_add_library)
     set(options)
     set(oneValueArgs TARGET)
-    set(multiValueArgs CXX_MODULES CXX_SOURCES INCLUDE_DIRECTORIES DEPENDENCIES)
+    set(multiValueArgs CXX_MODULES CXX_SOURCES CXX_HEADERS DEPENDENCIES)
     cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
 
     if(NOT arg_TARGET)
@@ -103,8 +103,11 @@ function(cpprog_add_library)
     endif()
 
     add_library("${arg_TARGET}")
-    target_sources("${arg_TARGET}" PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES} PRIVATE ${arg_CXX_SOURCES})
-    target_include_directories("${arg_TARGET}" INTERFACE ${arg_INCLUDE_DIRECTORIES})
+    target_sources("${arg_TARGET}"
+        PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} FILES ${arg_CXX_HEADERS}
+        PUBLIC FILE_SET CXX_MODULES FILES ${arg_CXX_MODULES}
+        PRIVATE ${arg_CXX_SOURCES}
+    )
     target_link_libraries("${arg_TARGET}" PRIVATE ${arg_DEPENDENCIES})
     _cpprog_set_compiler_options("${arg_TARGET}")
     _cpprog_enable_sanitizers("${arg_TARGET}")
