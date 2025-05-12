@@ -106,4 +106,5 @@ jobs:
         with:
           cacheFrom: ${{ env.GHCR_URL }}
           runCmd: |
+            cmake --preset clang-debug
             ctest --preset clang-debug-test
