@@ -7,7 +7,7 @@ on:
     branches:
       - main
 env:
-  GHCR_URL: ghcr.io/glennvl-ap/cpp-programming-solutions
+  GHCR_URL_WITH_UPPERCASE: ghcr.io/${{ github.repository }}:${{ github.sha }}
 jobs:
   build-devcontainer-image:
     runs-on: ubuntu-latest
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Convert GHCR url to lower case
+        run: echo "GHCR_URL=${GHCR_URL_WITH_UPPERCASE@L}" >> ${GITHUB_ENV}
       - name: Login to Github Container Registry
         uses: docker/login-action@v2
         with:
@@ -35,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Convert GHCR url to lower case
+        run: echo "GHCR_URL=${GHCR_URL_WITH_UPPERCASE@L}" >> ${GITHUB_ENV}
       - name: Login to Github Container Registry
         uses: docker/login-action@v2
         with:
@@ -61,6 +65,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Convert GHCR url to lower case
+        run: echo "GHCR_URL=${GHCR_URL_WITH_UPPERCASE@L}" >> ${GITHUB_ENV}
       - name: Login to Github Container Registry
         uses: docker/login-action@v2
         with:
