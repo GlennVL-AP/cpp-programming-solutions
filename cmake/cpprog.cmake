@@ -70,8 +70,11 @@ function(cpprog_generate_version_info)
     cmake_path(ABSOLUTE_PATH arg_INPUT_FILE BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" NORMALIZE OUTPUT_VARIABLE cpprog_INPUT_FILE)
     cmake_path(ABSOLUTE_PATH arg_OUTPUT_FILE BASE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" NORMALIZE OUTPUT_VARIABLE cpprog_OUTPUT_FILE)
 
+    set(cpprog_VERSION_TARGET "${cpprog_OUTPUT_FILE}")
+    string(REPLACE "/" "_" cpprog_VERSION_TARGET "${cpprog_VERSION_TARGET}")
+
     add_custom_target(
-        generate_cpprog_version_target ALL
+        "${cpprog_VERSION_TARGET}" ALL
         COMMAND "${CMAKE_COMMAND}"
             -DPROJECT_ROOT="${CMAKE_SOURCE_DIR}"
             -DINPUT_FILE="${cpprog_INPUT_FILE}"
@@ -84,7 +87,7 @@ function(cpprog_generate_version_info)
         COMMENT "[cpprog] Generating version info."
     )
 
-    add_dependencies("${arg_TARGET}" generate_cpprog_version_target)
+    add_dependencies("${arg_TARGET}" "${cpprog_VERSION_TARGET}")
 endfunction()
 
 function(cpprog_add_executable)
