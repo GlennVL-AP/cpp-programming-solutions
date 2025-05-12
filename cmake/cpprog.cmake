@@ -126,6 +126,7 @@ function(cpprog_add_library)
     endif()
 
     add_library("${arg_TARGET}")
+    add_library("${CMAKE_PROJECT_NAME}::${arg_TARGET}" ALIAS "${arg_TARGET}")
     _cpprog_configure_target("${arg_TARGET}" "${arg_CXX_MODULES}" "${arg_CXX_SOURCES}" "${arg_CXX_HEADERS}" "${arg_DEPENDENCIES}")
 endfunction()
 
