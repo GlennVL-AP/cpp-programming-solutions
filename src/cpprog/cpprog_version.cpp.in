@@ -4,24 +4,23 @@ import std;
 
 namespace cpprog::version {
 
+export struct VersionInfo
+{
+    int major{};
+    int minor{};
+    int patch{};
+
+    [[nodiscard]] constexpr auto operator<=>(VersionInfo const&) const = default;
+};
+
+export [[nodiscard]] constexpr VersionInfo get()
+{
+    return { .major = @VERSION_MAJOR@, .minor = @VERSION_MINOR@, .patch = @VERSION_PATCH@ };
+}
+
 export [[nodiscard]] constexpr std::string_view as_string()
 {
-    return "@VERSION@";
-}
-
-export [[nodiscard]] constexpr int major()
-{
-    return @VERSION_MAJOR@;
-}
-
-export [[nodiscard]] constexpr int minor()
-{
-    return @VERSION_MINOR@;
-}
-
-export [[nodiscard]] constexpr int patch()
-{
-    return @VERSION_PATCH@;
+    return "@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@";
 }
 
 export [[nodiscard]] constexpr std::string_view git_commit_hash()

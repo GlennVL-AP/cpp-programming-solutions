@@ -9,9 +9,20 @@ TEST_CASE("test cpprog::version", "[cpprog][version]")
     {
         auto const expected = cpprog::version::as_string();
         auto const actual =
-            std::format("{}.{}.{}", cpprog::version::major(), cpprog::version::minor(), cpprog::version::patch());
+            std::format("{}.{}.{}", cpprog::version::get().major, cpprog::version::get().minor, cpprog::version::get().patch);
 
         REQUIRE(actual == expected);
+    }
+
+    SECTION("compare versions")
+    {
+        using cpprog::version::VersionInfo;
+
+        STATIC_REQUIRE(VersionInfo{1, 2, 3} == VersionInfo{1, 2, 3});
+        STATIC_REQUIRE(VersionInfo{1, 2, 3} != VersionInfo{3, 2, 1});
+        STATIC_REQUIRE(VersionInfo{1, 2, 3} < VersionInfo{2, 2, 3});
+        STATIC_REQUIRE(VersionInfo{1, 2, 3} < VersionInfo{1, 3, 3});
+        STATIC_REQUIRE(VersionInfo{1, 2, 3} < VersionInfo{1, 2, 4});
     }
 }
 

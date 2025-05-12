@@ -20,8 +20,6 @@ if(NOT VERSION_PATCH)
     set(VERSION_PATCH 0)
 endif()
 
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
-
 execute_process(
     COMMAND git rev-parse HEAD
     WORKING_DIRECTORY "${PROJECT_ROOT}"
@@ -37,6 +35,6 @@ if(NOT GIT_REV_PARSE_RESULT EQUAL 0)
 endif()
 
 message(STATUS "[cpprog] Generating ${OUTPUT_FILE}.")
-message(STATUS "[cpprog] VERSION=${VERSION}, GIT_COMMIT_HASH=${GIT_COMMIT_HASH}")
+message(STATUS "[cpprog] VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}, GIT_COMMIT_HASH=${GIT_COMMIT_HASH}")
 
 configure_file("${INPUT_FILE}" "${OUTPUT_FILE}" @ONLY)
