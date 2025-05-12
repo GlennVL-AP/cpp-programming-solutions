@@ -57,6 +57,36 @@ function(_cpprog_generate_debuginit)
     configure_file("${CMAKE_SOURCE_DIR}/lldbinit.in" "${CMAKE_SOURCE_DIR}/.lldbinit")
 endfunction()
 
+function(cpprog_generate_version_info)
+    set(options)
+    set(oneValueArgs TARGET INPUT_FILE OUTPUT_FILE)
+    set(multiValueArgs)
+    cmake_parse_arguments(PARSE_ARGV 0 arg "${OPTIONS}" "${oneValueArgs}" "${multiValueArgs}")
+
+    if(NOT TARGET "${arg_TARGET}")
+        message(FATAL_ERROR "[cpprog] Target ${arg_TARGET} does not exist.")
+    endif()
+
+    cmake_path(ABSOLUTE_PATH arg_INPUT_FILE BASE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" NORMALIZE OUTPUT_VARIABLE cpprog_INPUT_FILE)
+    cmake_path(ABSOLUTE_PATH arg_OUTPUT_FILE BASE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}" NORMALIZE OUTPUT_VARIABLE cpprog_OUTPUT_FILE)
+
+    add_custom_target(
+        generate_cpprog_version_target ALL
+        COMMAND "${CMAKE_COMMAND}"
+            -DPROJECT_ROOT="${CMAKE_SOURCE_DIR}"
+            -DINPUT_FILE="${cpprog_INPUT_FILE}"
+            -DOUTPUT_FILE="${cpprog_OUTPUT_FILE}"
+            -DVERSION_MAJOR="${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}"
+            -DVERSION_MINOR="${${CMAKE_PROJECT_NAME}_VERSION_MINOR}"
+            -DVERSION_PATCH="${${CMAKE_PROJECT_NAME}_VERSION_PATCH}"
+            -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/generate_version_info.cmake"
+        BYPRODUCTS "${cpprog_OUTPUT_FILE}"
+        COMMENT "[cpprog] Generating version info."
+    )
+
+    add_dependencies("${arg_TARGET}" generate_cpprog_version_target)
+endfunction()
+
 function(cpprog_add_executable)
     set(options)
     set(oneValueArgs TARGET)
