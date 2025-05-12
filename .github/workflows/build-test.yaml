@@ -74,6 +74,4 @@ jobs:
         with:
           cacheFrom: ghcr.io/${{ github.repository }}
           runCmd: |
-            cmake --preset clang-debug
-            cmake --build --preset clang-debug-build
             ctest --preset clang-debug-test
