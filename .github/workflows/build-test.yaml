@@ -6,6 +6,8 @@ on:
   pull_request:
     branches:
       - main
+env:
+  GHCR_URL: ghcr.io/glennvl-ap/cpp-programming-solutions
 jobs:
   build-devcontainer-image:
     runs-on: ubuntu-latest
@@ -21,8 +23,8 @@ jobs:
       - name: Pre-build dev container image
         uses: devcontainers/ci@v0.3
         with:
-          imageName: ghcr.io/${{ github.repository }}
-          cacheFrom: ghcr.io/${{ github.repository }}
+          imageName: $GHCR_URL
+          cacheFrom: $GHCR_URL
           push: always
   build:
     needs: build-devcontainer-image
@@ -39,14 +41,14 @@ jobs:
       - name: Release build
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ghcr.io/${{ github.repository }}
+          cacheFrom: $GHCR_URL
           runCmd: |
             cmake --preset clang-release
             cmake --build --preset clang-release-build
       - name: Debug build
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ghcr.io/${{ github.repository }}
+          cacheFrom: $GHCR_URL
           runCmd: |
             cmake --preset clang-debug
             cmake --build --preset clang-debug-build
@@ -65,13 +67,13 @@ jobs:
       - name: Debug build
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ghcr.io/${{ github.repository }}
+          cacheFrom: $GHCR_URL
           runCmd: |
             cmake --preset clang-debug
             cmake --build --preset clang-debug-build
       - name: Test
         uses: devcontainers/ci@v0.3
         with:
-          cacheFrom: ghcr.io/${{ github.repository }}
+          cacheFrom: $GHCR_URL
           runCmd: |
             ctest --preset clang-debug-test
