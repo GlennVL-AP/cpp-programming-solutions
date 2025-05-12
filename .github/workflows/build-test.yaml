@@ -7,7 +7,7 @@ on:
     branches:
       - main
 env:
-  GHCR_URL_WITH_UPPERCASE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  GHCR_URL_WITH_UPPERCASE: ghcr.io/${{ github.repository }}
 jobs:
   build-devcontainer-image:
     name: Build devcontainer
