@@ -101,10 +101,11 @@ jobs:
         with:
           name: clang-debug-build
           path: build/clang-debug
+      - name: Fix permissions on test binaries
+        run: find build/clang-debug/tests -type f -exec chmod +x {} \;
       - name: Run tests
         uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ${{ env.GHCR_URL }}
           runCmd: |
-            cmake --preset clang-debug
             ctest --preset clang-debug-test
