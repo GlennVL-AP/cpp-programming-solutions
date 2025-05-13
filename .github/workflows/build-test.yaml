@@ -51,6 +51,7 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ${{ env.GHCR_URL }}
+          push: never
           runCmd: |
             cmake --preset clang-release
             cmake --build --preset clang-release-build
@@ -73,6 +74,7 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ${{ env.GHCR_URL }}
+          push: never
           runCmd: |
             cmake --preset clang-debug
             cmake --build --preset clang-debug-build
@@ -110,5 +112,6 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           cacheFrom: ${{ env.GHCR_URL }}
+          push: never
           runCmd: |
             ctest --preset clang-debug-test
