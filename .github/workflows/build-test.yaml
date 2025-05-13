@@ -76,11 +76,14 @@ jobs:
           runCmd: |
             cmake --preset clang-debug
             cmake --build --preset clang-debug-build
-      - name: Upload debug build directory
+      - name: Archive debug build
+        run: tar cfz clang-debug.tar.gz build/clang-debug
+      - name: Upload debug build artifact
         uses: actions/upload-artifact@v4
         with:
           name: clang-debug-build
-          path: build/clang-debug
+          path: clang-debug.tar.gz
+          retention-days: 1
   run-tests:
     name: Run tests
     needs: make-debug-build
@@ -96,13 +99,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Download debug build directory
+      - name: Download debug build artifact
         uses: actions/download-artifact@v4
         with:
           name: clang-debug-build
-          path: build/clang-debug
-      - name: Fix permissions on test binaries
-        run: find build/clang-debug/tests -type f -exec chmod +x {} \;
+          path: clang-debug.tar.gz
+      - name: Extract debug build
+        run: tar xfz clang-debug.tar.gz
       - name: Run tests
         uses: devcontainers/ci@v0.3
         with:
