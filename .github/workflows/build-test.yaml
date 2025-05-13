@@ -77,13 +77,14 @@ jobs:
             cmake --preset clang-debug
             cmake --build --preset clang-debug-build
       - name: Archive debug build
-        run: tar cfz clang-debug.tar.gz build/clang-debug
+        run: tar cf clang-debug.tar build/clang-debug
       - name: Upload debug build artifact
         uses: actions/upload-artifact@v4
         with:
           name: clang-debug-build
-          path: clang-debug.tar.gz
+          path: clang-debug.tar
           retention-days: 1
+          include-hidden-files: true
   run-tests:
     name: Run tests
     needs: make-debug-build
@@ -103,9 +104,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: clang-debug-build
-          path: clang-debug.tar.gz
       - name: Extract debug build
-        run: tar xfz clang-debug.tar.gz
+        run: tar xf clang-debug.tar
       - name: Run tests
         uses: devcontainers/ci@v0.3
         with:
