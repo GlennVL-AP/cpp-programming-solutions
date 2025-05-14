@@ -88,6 +88,7 @@ function(cpprog_generate_version_info)
     )
 
     add_dependencies("${arg_TARGET}" "${cpprog_VERSION_TARGET}")
+    target_sources("${arg_TARGET}" PUBLIC FILE_SET CXX_MODULES FILES "${cpprog_OUTPUT_FILE}")
 endfunction()
 
 function(cpprog_add_executable)
