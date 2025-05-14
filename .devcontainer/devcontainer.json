@@ -32,10 +32,14 @@
                     "name": "Debug with LLDB",
                     "type": "lldb-dap",
                     "request": "launch",
+                    "runInTerminal": true,
                     "program": "${command:cmake.launchTargetPath}",
                     "args": [],
                     "cwd": "${workspaceFolder}",
                     "stopOnEntry": false,
+                    "env" : {
+                        "LSAN_OPTIONS": "detect_leaks=0"
+                    },
                     "initCommands": [
                         "command source ${workspaceFolder}/.lldbinit",
                         "breakpoint set --name main"
