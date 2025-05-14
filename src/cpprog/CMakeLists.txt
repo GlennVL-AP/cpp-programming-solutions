@@ -3,7 +3,6 @@ cpprog_add_library(
     CXX_MODULES
     "cpprog.cpp"
     "cpprog_utils.cpp"
-    "${CMAKE_CURRENT_BINARY_DIR}/cpprog_version.cpp"
 )
 
 cpprog_generate_version_info(
