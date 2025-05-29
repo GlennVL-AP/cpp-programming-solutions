@@ -4,7 +4,7 @@
         "dockerfile": "Dockerfile",
         "args": {
             "CLANG_VERSION": "20",
-            "CMAKE_VERSION": "4.0.1"
+            "CMAKE_VERSION": "4.0.2"
         }
     },
     "capAdd": [
