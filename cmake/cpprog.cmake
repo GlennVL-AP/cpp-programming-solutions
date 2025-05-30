@@ -7,24 +7,12 @@ macro(cpprog_init)
     _cpprog_enable_lto()
     _cpprog_find_clang_tidy()
     _cpprog_generate_debuginit()
-    _cpprog_clion_clangd_workaround()
 endmacro()
 
-function(_cpprog_clion_clangd_workaround)
-    if($ENV{CLION_IDE})
-        message(STATUS "[cpprog] Detected clion, applying workaround for module std.")
-        set(cpprog_LIBCXX_DIR "/usr/lib/llvm-20/share/libc++/v1")
-        if(NOT EXISTS "${cpprog_LIBCXX_DIR}")
-            message(FATAL_ERROR "[cpprog] libc++ not found at ${cpprog_LIBCXX_DIR}")
-        endif()
-        add_library(clion_workaround_std_target STATIC EXCLUDE_FROM_ALL)
-        target_sources(clion_workaround_std_target
-            PRIVATE FILE_SET CXX_MODULES
-            BASE_DIRS "${cpprog_LIBCXX_DIR}"
-            FILES "${cpprog_LIBCXX_DIR}/std.cppm" "${cpprog_LIBCXX_DIR}/std.compat.cppm"
-        )
-    endif()
-endfunction()
+macro(cpprog_configure_project)
+    _cpprog_clion_clangd_workaround()
+    _cpprog_enable_testing()
+endmacro()
 
 macro(_cpprog_generate_compile_commands)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -73,6 +61,29 @@ endmacro()
 function(_cpprog_generate_debuginit)
     configure_file("${CMAKE_SOURCE_DIR}/lldbinit.in" "${CMAKE_SOURCE_DIR}/.lldbinit")
 endfunction()
+
+function(_cpprog_clion_clangd_workaround)
+    if($ENV{CLION_IDE})
+        message(STATUS "[cpprog] Detected clion, applying workaround for module std.")
+        set(cpprog_LIBCXX_DIR "/usr/lib/llvm-20/share/libc++/v1")
+        if(NOT EXISTS "${cpprog_LIBCXX_DIR}")
+            message(FATAL_ERROR "[cpprog] libc++ not found at ${cpprog_LIBCXX_DIR}")
+        endif()
+        add_library(clion_workaround_std_target STATIC EXCLUDE_FROM_ALL)
+        target_sources(clion_workaround_std_target
+            PRIVATE FILE_SET CXX_MODULES
+            BASE_DIRS "${cpprog_LIBCXX_DIR}"
+            FILES "${cpprog_LIBCXX_DIR}/std.cppm" "${cpprog_LIBCXX_DIR}/std.compat.cppm"
+        )
+    endif()
+endfunction()
+
+macro(_cpprog_enable_testing)
+    include(CTest)
+    enable_testing()
+    find_package(Catch2 CONFIG REQUIRED)
+    include(Catch)
+endmacro()
 
 function(cpprog_generate_version_info)
     set(options)
