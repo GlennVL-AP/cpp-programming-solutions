@@ -4,7 +4,7 @@ import std;
 
 namespace cpprog {
 
-export struct ExpectError : std::runtime_error
+export struct ExpectError final : std::runtime_error
 {
     using std::runtime_error::runtime_error;
 };
@@ -28,7 +28,7 @@ export constexpr void expect(
     }
 }
 
-export struct NarrowingError : std::exception
+export struct NarrowingError final : std::exception
 {
     [[nodiscard]] char const* what() const noexcept override { return "NarrowingError"; }
 };
