@@ -17,7 +17,7 @@ endmacro()
 macro(_cpprog_generate_compile_commands)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-    file(RELATIVE_PATH cpprog_RELATIVE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build" "${CMAKE_CURRENT_BINARY_DIR}")
+    cmake_path(RELATIVE_PATH CMAKE_CURRENT_BINARY_DIR BASE_DIRECTORY "${CMAKE_SOURCE_DIR}/build" OUTPUT_VARIABLE cpprog_RELATIVE_BINARY_DIR)
 
     execute_process(
         COMMAND "${CMAKE_COMMAND}" -E create_symlink
