@@ -1,0 +1,1 @@
+cpprog_add_executable(TARGET exam_june_opdracht_2 CXX_SOURCES main.cpp)

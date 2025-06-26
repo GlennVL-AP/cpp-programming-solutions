@@ -1,0 +1,1 @@
+cpprog_add_library(TARGET exam_june_opdracht_3_lib CXX_MODULES statistics.cpp)

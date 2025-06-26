@@ -48,3 +48,11 @@ cpprog_add_test(
     DEPENDENCIES
     labo_10_lib
 )
+
+cpprog_add_test(
+    TARGET test_exam_june_opdracht_3
+    CXX_SOURCES
+    "examjune_statistics.test.cpp"
+    DEPENDENCIES
+    exam_june_opdracht_3_lib
+)
